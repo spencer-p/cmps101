@@ -69,7 +69,7 @@ public class List implements Iterable<Integer> {
 
 	public boolean equals(List L) {
 		if (L.length() != length()) {
-			throw new IndexOutOfBoundsException("L length != list length");
+			return false;
 		}
 
 		Node thisTmpCurrent = current;
@@ -94,7 +94,7 @@ public class List implements Iterable<Integer> {
 
 	public boolean equals(int data[]) {
 		if (data.length != length()) {
-			throw new IndexOutOfBoundsException("data length != list length");
+			return false;
 		}
 
 		Node tmpCurrent = current;
@@ -212,12 +212,21 @@ public class List implements Iterable<Integer> {
 	public void deleteFront() {
 		if (front != null) {
 			front = front.next;
+
+			if (front == current) {
+				nextCount--;
+			}
+			else {
+				prevCount--;
+			}
 		}
 	}
 
 	public void deleteBack() {
 		if (front != null) {
 			back = back.prev;
+
+			nextCount--;
 		}
 	}
 
@@ -227,14 +236,14 @@ public class List implements Iterable<Integer> {
 			if (current.prev != null) {
 				current.prev.next = current.next;
 			}
-			
+
 			// Close next
 			if (current.next != null) {
 				current.next.prev = current.prev;
 			}
 
-			// Set current to after (default) or before
-			current = (current.next != null) ? current.next : current.prev;
+			// Clear current
+			current = null;
 
 			// Current was 'next' so decrease nextcount
 			nextCount--;
