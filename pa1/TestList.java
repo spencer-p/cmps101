@@ -109,7 +109,6 @@ public class TestList {
 		assertEquals(2, this.l.length());
 
 		this.l.delete();
-		assertEquals(2, this.l.get());
 		assertEquals(1, this.l.length());
 	}
 
@@ -122,7 +121,6 @@ public class TestList {
 		assertEquals(2, this.l.length());
 
 		this.l.delete();
-		assertEquals(2, this.l.get());
 		assertEquals(1, this.l.length());
 
 	}
@@ -298,5 +296,209 @@ public class TestList {
 
 		this.l.moveBack();
 		assertEquals(2, this.l.get());
+	}
+
+	@Test
+	public void DeleteFront_length() {
+		this.l.prepend(76);
+		this.l.prepend(4);
+		assertEquals(2, this.l.length());
+
+		this.l.deleteFront();
+		assertEquals(1, this.l.length());
+
+		this.l.prepend(3);
+		this.l.prepend(1);
+		this.l.moveFront();
+		this.l.insertBefore(115);
+		assertEquals(4, this.l.length());
+
+		this.l.deleteFront();
+		assertEquals(3, this.l.length());
+	}
+
+	@Test
+	public void DeleteBack_length() {
+		this.l.append(1);
+		assertEquals(1, this.l.length());
+
+		this.l.deleteBack();
+		assertEquals(0, this.l.length());
+
+		this.l.append(2);
+		this.l.append(3);
+		this.l.append(5);
+		this.l.moveFront();
+		this.l.insertAfter(12);
+		assertEquals(4, this.l.length());
+
+		this.l.deleteBack();
+		assertEquals(3, this.l.length());
+	}
+
+	@Test
+	public void DeleteFront_index() {
+		this.l.prepend(5);
+		this.l.prepend(65);
+		this.l.prepend(43);
+		this.l.prepend(2);
+		this.l.prepend(8);
+		this.l.prepend(1);
+		this.l.moveFront();
+		assertEquals(0, this.l.index());
+		this.l.deleteFront();
+		assertEquals(-1, this.l.index());
+
+		this.l.moveBack();
+		this.l.deleteFront();
+		assertEquals(3, this.l.index());
+	}
+
+	@Test
+	public void DeleteBack_index() {
+		this.l.prepend(5);
+		this.l.prepend(65);
+		this.l.prepend(43);
+		this.l.prepend(2);
+		this.l.prepend(8);
+		this.l.prepend(1);
+		this.l.moveBack();
+		this.l.deleteBack();
+		assertEquals(-1, this.l.index());
+
+		this.l.moveFront();
+		this.l.deleteBack();
+		this.l.moveNext();
+		assertEquals(1, this.l.index());
+	}
+
+	@Test
+	public void Delete_index() {
+		this.l.prepend(5);
+		this.l.prepend(65);
+		this.l.prepend(43);
+		this.l.moveBack();
+		this.l.delete();
+		assertEquals(-1, this.l.index());
+
+		this.l.prepend(2);
+		this.l.prepend(8);
+		this.l.prepend(1);
+		this.l.moveBack();
+		assertEquals(4, this.l.index());
+
+		this.l.delete();
+		this.l.moveBack();
+		assertEquals(3, this.l.index());
+
+		this.l.moveFront();
+		this.l.delete();
+		this.l.moveFront();
+		assertEquals(0, this.l.index());
+
+		this.l.delete();
+		assertEquals(-1, this.l.index());
+	}
+
+	@Test
+	public void Append_equals() {
+		List B = new List();
+		this.l.append(1);
+		B.append(1);
+		this.l.append(2);
+		assertFalse(this.l.equals(B));
+
+		B.append(2);
+		assertTrue(this.l.equals(B));
+	}
+
+	@Test
+	public void Prepend_equals() {
+		List B = new List();
+		this.l.prepend(1);
+		B.prepend(1);
+		this.l.prepend(2);
+		assertFalse(this.l.equals(B));
+
+		B.prepend(2);
+		assertTrue(this.l.equals(B));
+	}
+
+	@Test
+	public void DeleteBack_equals() {
+		List B = new List();
+		this.l.prepend(1);
+		B.prepend(1);
+		this.l.prepend(2);
+		B.prepend(2);
+		this.l.deleteBack();
+		assertFalse(this.l.equals(B));
+
+		B.deleteBack();
+		assertTrue(this.l.equals(B));
+
+		this.l.append(3);
+		B.append(3);
+		this.l.deleteBack();
+		B.deleteBack();
+		assertTrue(this.l.equals(B));
+	}
+
+	@Test
+	public void Delete_equals() {
+		List B = new List();
+		this.l.prepend(1);
+		B.prepend(1);
+		this.l.prepend(2);
+		B.prepend(2);
+		this.l.moveBack();
+		this.l.delete();
+		assertFalse(this.l.equals(B));
+
+		B.moveBack();
+		B.delete();
+		assertTrue(this.l.equals(B));
+
+		this.l.append(3);
+		B.append(3);
+		this.l.moveBack();
+		this.l.delete();
+		B.moveBack();
+		B.delete();
+		assertTrue(this.l.equals(B));
+	}
+
+	@Test
+	public void NonEmpty_front() {
+		this.l.prepend(5);
+		this.l.append(7);
+		this.l.prepend(2);
+		this.l.moveFront();
+		this.l.insertBefore(43);
+		this.l.deleteFront();
+		this.l.delete();
+		assertEquals(5, this.l.front());
+	}
+
+	@Test
+	public void NonEmpty_back() {
+		this.l.append(5);
+		this.l.prepend(7);
+		this.l.append(2);
+		this.l.moveBack();
+		this.l.insertAfter(43);
+		this.l.deleteBack();
+		this.l.delete();
+		assertEquals(5, this.l.back());
+	}
+
+	@Test
+	public void NonEmpty_copy() {
+		this.l.append(2);
+		this.l.prepend(1);
+		this.l.moveFront();
+		List B = this.l.copy();
+		assertEquals(0, this.l.index());
+		assertTrue(this.l.equals(B));
 	}
 }
