@@ -211,6 +211,10 @@ public class List implements Iterable<Integer> {
 
 	public void deleteFront() {
 		if (front != null) {
+			if (current == front) {
+				current = null;
+			}
+
 			front = front.next;
 
 			if (front == current) {
@@ -223,7 +227,11 @@ public class List implements Iterable<Integer> {
 	}
 
 	public void deleteBack() {
-		if (front != null) {
+		if (back != null) {
+			if (current == back) {
+				current = null;
+			}
+
 			back = back.prev;
 
 			nextCount--;
@@ -240,6 +248,16 @@ public class List implements Iterable<Integer> {
 			// Close next
 			if (current.next != null) {
 				current.next.prev = current.prev;
+			}
+
+			// Update front if necessary
+			if (current == front) {
+				front = current.next;
+			}
+
+			// Update back if necessary
+			if (current == back) {
+				back = current.prev;
 			}
 
 			// Clear current
@@ -296,10 +314,13 @@ public class List implements Iterable<Integer> {
 	private class ListIterator implements Iterator<Integer> {
 		List list = null;
 		Node tmpCurrent = null;
+		int tmpPrevCount = -1, tmpNextCount = -1;
 
 		ListIterator(List list) {
 			this.list = list;
 			this.tmpCurrent = list.current;
+			this.tmpPrevCount = list.prevCount;
+			this.tmpNextCount = list.nextCount;
 			this.list.moveFront();
 		}
 
@@ -309,6 +330,8 @@ public class List implements Iterable<Integer> {
 			}
 			else {
 				list.current = tmpCurrent;
+				list.prevCount = tmpPrevCount;
+				list.nextCount = tmpNextCount;
 				return false;
 			}
 		}
