@@ -79,45 +79,45 @@ public class List implements Iterable<Integer> {
 	}
 
 	public boolean equals(List L) {
+		// Lists of different lengths are never equal
 		if (L.length() != length()) {
 			return false;
 		}
 
-		Node thisTmpCurrent = current;
-		Node otherTmpCurrent = L.current;
-
+		// Scrub both to front
 		moveFront();
 		L.moveFront();
+
 		while(index() >= 0) {
+			// Early exit if any are not equal
 			if (get() != L.get()) {
-				current = thisTmpCurrent;
-				L.current = otherTmpCurrent;
 				return false;
 			}
+
+			// next
 			moveNext();
 			L.moveNext();
 		}
 
-		current = thisTmpCurrent;
-		L.current = otherTmpCurrent;
+		// Everything was equal
 		return true;
 	}
 
 	public boolean equals(int data[]) {
+		// Same structure as equals(List)
+
 		if (data.length != length()) {
 			return false;
 		}
 
-		Node tmpCurrent = current;
 		moveFront();
 		for (int i : data) {
 			if (i != get()) {
-				current = tmpCurrent;
 				return false;
 			}
 			moveNext();
 		}
-		current = tmpCurrent;
+
 		return true;
 	}
 
