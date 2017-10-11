@@ -11,6 +11,17 @@ public class List implements Iterable<Integer> {
 	int prevCount = 0, nextCount = 0;
 	Node current = null, front = null, back = null;
 
+	// Node object for data
+	class Node {
+		public Node next = null, prev = null;
+		public int data;
+
+		Node(int d) {
+			this.data = d;
+		}
+	}
+
+
 	// Constructors
 	public List() {}
 
@@ -301,16 +312,6 @@ public class List implements Iterable<Integer> {
 		front = current;
 		back = current;
 		nextCount++;
-	}
-
-	// Node for data
-	class Node {
-		public Node next = null, prev = null;
-		public int data;
-
-		Node(int d) {
-			this.data = d;
-		}
 	}
 
 	// Iteration
