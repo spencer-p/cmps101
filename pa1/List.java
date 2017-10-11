@@ -210,62 +210,65 @@ public class List implements Iterable<Integer> {
 	}
 
 	public void deleteFront() {
-		if (front != null) {
-			if (current == front) {
-				current = null;
-			}
+		if (length() <= 0) {
+			throw new IndexOutOfBoundsException("deleteFront() from empty list");
+		}
+		if (current == front) {
+			current = null;
+		}
 
-			front = front.next;
+		front = front.next;
 
-			if (front == current) {
-				nextCount--;
-			}
-			else {
-				prevCount--;
-			}
+		if (front == current) {
+			nextCount--;
+		}
+		else {
+			prevCount--;
 		}
 	}
 
 	public void deleteBack() {
-		if (back != null) {
-			if (current == back) {
-				current = null;
-			}
-
-			back = back.prev;
-
-			nextCount--;
+		if (length() <= 0) {
+			throw new IndexOutOfBoundsException("deleteBack() from empty list");
 		}
+		if (current == back) {
+			current = null;
+		}
+
+		back = back.prev;
+
+		nextCount--;
 	}
 
 	public void delete() {
-		if (current != null) {
-			// Close previous
-			if (current.prev != null) {
-				current.prev.next = current.next;
-			}
-
-			// Close next
-			if (current.next != null) {
-				current.next.prev = current.prev;
-			}
-
-			// Update front if necessary
-			if (current == front) {
-				front = current.next;
-			}
-
-			// Update back if necessary
-			if (current == back) {
-				back = current.prev;
-			}
-
-			// Clear current
-			current = null;
-
-			// Current was 'next' so decrease nextcount
-			nextCount--;
+		if (length() <= 0 || length() < 0) {
+			throw new IndexOutOfBoundsException("deleteBack() from empty list");
 		}
+		// Close previous
+		if (current.prev != null) {
+			current.prev.next = current.next;
+		}
+
+		// Close next
+		if (current.next != null) {
+			current.next.prev = current.prev;
+		}
+
+		// Update front if necessary
+		if (current == front) {
+			front = current.next;
+		}
+
+		// Update back if necessary
+		if (current == back) {
+			back = current.prev;
+		}
+
+		// Clear current
+		current = null;
+
+		// Current was 'next' so decrease nextcount
+		nextCount--;
 	}
 
 	public void extend(int data[]) {
