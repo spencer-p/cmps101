@@ -1,0 +1,5 @@
+List.java - Defines List ADT
+ListClient.java - Provided by class
+Lex.java - Client that alphabetically organizes files
+Makefile - Compiles output
+README - this file
