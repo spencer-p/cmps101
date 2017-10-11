@@ -26,14 +26,17 @@ public class List implements Iterable<Integer> {
 	public List() {}
 
 	public List(int data[]) {
+		// To construct a new list from an array, we'll just use extend()
 		extend(data);
 	}
 
 	public List(List toCopy) {
+		// To copy a list, we'll concat to the new array the old array
 		concat(toCopy);
 	}
 
 	public List copy() {
+		// Copy function uses constructor
 		return new List(this);
 	}
 
@@ -132,12 +135,16 @@ public class List implements Iterable<Integer> {
 
 	public void moveFront() {
 		current = front;
+
+		// Everything is next, nothing is prev at front
 		nextCount = length();
 		prevCount = 0;
 	}
 
 	public void moveBack() {
 		current = back;
+
+		// At the back - 1 item is next, everything else is prev
 		prevCount = length()-1;
 		nextCount = 1;
 	}
@@ -190,12 +197,16 @@ public class List implements Iterable<Integer> {
 			Node tmp = current.prev;
 			current.prev = new Node(data);
 			current.prev.prev = tmp;
+
+			// If the previous value exists, correct its next
 			if (tmp != null) {
 				tmp.next = current.prev;
 			}
+			// If it doesn't exist- this was the front, special case
 			else {
 				front = current.prev;
 			}
+
 			current.prev.next = current;
 			prevCount++;
 		}
@@ -209,12 +220,16 @@ public class List implements Iterable<Integer> {
 			Node tmp = current.next;
 			current.next = new Node(data);
 			current.next.next = tmp;
+
+			// If next value exists, correct its prev
 			if (tmp != null) {
 				tmp.prev = current.next;
 			}
+			// If next value doesn't exist, then this was the back, fix it
 			else {
 				back = current.next;
 			}
+
 			current.next.prev = current;
 			nextCount++;
 		}
@@ -224,12 +239,16 @@ public class List implements Iterable<Integer> {
 		if (length() <= 0) {
 			throw new IndexOutOfBoundsException("deleteFront() from empty list");
 		}
+
+		// Clear current if it's the front
 		if (current == front) {
 			current = null;
 		}
 
+		// Move front
 		front = front.next;
 
+		// Update counts
 		if (front == current) {
 			nextCount--;
 		}
@@ -242,12 +261,16 @@ public class List implements Iterable<Integer> {
 		if (length() <= 0) {
 			throw new IndexOutOfBoundsException("deleteBack() from empty list");
 		}
+
+		// Clear current if necessary
 		if (current == back) {
 			current = null;
 		}
 
+		// Update back
 		back = back.prev;
 
+		// Remove nextcount (back is always next)
 		nextCount--;
 	}
 
@@ -282,19 +305,21 @@ public class List implements Iterable<Integer> {
 		nextCount--;
 	}
 
+	// Extends the list with an array of integers
 	public void extend(int data[]) {
 		for (int d : data) {
 			append(d);
 		}
 	}
 
+	// Concatenates a list onto this list
 	public void concat(List l) {
 		for (int d : l) {
 			append(d);
 		}
 	}
 
-
+	// Convert the list to a string
 	public String toString() {
 		String s = "";
 		for (int d : this) {
