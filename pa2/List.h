@@ -11,13 +11,7 @@
 
 #include <stdio.h>
 
-typedef struct List_t {
-    struct List_t *current;
-    struct List_t *front;
-    struct List_t *back;
-    int prev_count;
-    int next_count;
-} List;
+typedef struct ListObj* List;
 
 // Constructors-destructors
 List newList(void);
@@ -47,6 +41,6 @@ void delete(List L);
 
 // Other operations
 void printList(FILE* out, List L);
-List copyList(List L) ;
+List copyList(List L);
 
 #endif
