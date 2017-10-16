@@ -1,0 +1,10 @@
+CMPS 101 Fall 2017 PA 2
+Author: Spencer Peterson
+
+Files:
+Lex.c        - implements the lexer which sorts files alphabetically by line
+List.h       - public interface for the List object
+List.c       - private implementation of the List object in C
+ListClient.c - as provided
+Makefile     - defines rules to compile List.o, Lex, and ListClient
+README       - this file
