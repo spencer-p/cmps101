@@ -25,21 +25,6 @@ public class List implements Iterable<Integer> {
 	// Constructors
 	public List() {}
 
-	public List(int data[]) {
-		// To construct a new list from an array, we'll just use extend()
-		extend(data);
-	}
-
-	public List(List toCopy) {
-		// To copy a list, we'll concat to the new array the old array
-		concat(toCopy);
-	}
-
-	public List copy() {
-		// Copy function uses constructor
-		return new List(this);
-	}
-
 	// Access functions
 	public int length() {
 		return prevCount+nextCount;
@@ -105,25 +90,6 @@ public class List implements Iterable<Integer> {
 		// Everything was equal
 		return true;
 	}
-
-	public boolean equals(int data[]) {
-		// Same structure as equals(List)
-
-		if (data.length != length()) {
-			return false;
-		}
-
-		moveFront();
-		for (int i : data) {
-			if (i != get()) {
-				return false;
-			}
-			moveNext();
-		}
-
-		return true;
-	}
-
 
 	// Mutability
 	public void clear() {
@@ -303,20 +269,6 @@ public class List implements Iterable<Integer> {
 
 		// Current was 'next' so decrease nextcount
 		nextCount--;
-	}
-
-	// Extends the list with an array of integers
-	public void extend(int data[]) {
-		for (int d : data) {
-			append(d);
-		}
-	}
-
-	// Concatenates a list onto this list
-	public void concat(List l) {
-		for (int d : l) {
-			append(d);
-		}
 	}
 
 	// Convert the list to a string
