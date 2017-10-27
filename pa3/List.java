@@ -6,17 +6,17 @@
 
 import java.util.Iterator;
 
-public class List implements Iterable<Integer> {
+public class List implements Iterable<Object> {
 
-	int prevCount = 0, nextCount = 0;
-	Node current = null, front = null, back = null;
+	private int prevCount = 0, nextCount = 0;
+	private Node current = null, front = null, back = null;
 
 	// Node object for data
 	class Node {
 		public Node next = null, prev = null;
-		public int data;
+		public Object data;
 
-		Node(int d) {
+		Node(Object d) {
 			this.data = d;
 		}
 	}
@@ -39,7 +39,7 @@ public class List implements Iterable<Integer> {
 		}
 	}
 
-	public int front() {
+	public Object front() {
 		if (front == null) {
 			throw new IndexOutOfBoundsException("front() from empty list");
 		}
@@ -48,7 +48,7 @@ public class List implements Iterable<Integer> {
 		}
 	}
 
-	public int back() {
+	public Object back() {
 		if (back == null) {
 			throw new IndexOutOfBoundsException("back() from empty list");
 		}
@@ -57,7 +57,7 @@ public class List implements Iterable<Integer> {
 		}
 	}
 
-	public int get() {
+	public Object get() {
 		if (current == null) {
 			throw new IndexOutOfBoundsException("get() from null cursor");
 		}
@@ -78,7 +78,7 @@ public class List implements Iterable<Integer> {
 
 		while(index() >= 0) {
 			// Early exit if any are not equal
-			if (get() != L.get()) {
+			if (!get().equals(L.get())) {
 				return false;
 			}
 
@@ -131,7 +131,7 @@ public class List implements Iterable<Integer> {
 		}
 	}
 
-	public void prepend(int data) {
+	public void prepend(Object data) {
 		if (length() == 0) {
 			createCurrent(data);
 		}
@@ -143,7 +143,7 @@ public class List implements Iterable<Integer> {
 		}
 	}
 
-	public void append(int data) {
+	public void append(Object data) {
 		if (length() == 0) {
 			createCurrent(data);
 		}
@@ -155,7 +155,7 @@ public class List implements Iterable<Integer> {
 		}
 	}
 
-	public void insertBefore(int data) {
+	public void insertBefore(Object data) {
 		if (length() == 0) {
 			createCurrent(data);
 		}
@@ -178,7 +178,7 @@ public class List implements Iterable<Integer> {
 		}
 	}
 
-	public void insertAfter(int data) {
+	public void insertAfter(Object data) {
 		if (length() == 0) {
 			createCurrent(data);
 		}
@@ -242,7 +242,7 @@ public class List implements Iterable<Integer> {
 
 	public void delete() {
 		if (length() <= 0 || length() < 0) {
-			throw new IndexOutOfBoundsException("deleteBack() from empty list");
+			throw new IndexOutOfBoundsException("delete() from empty list");
 		}
 		// Close previous
 		if (current.prev != null) {
@@ -274,17 +274,17 @@ public class List implements Iterable<Integer> {
 	// Convert the list to a string
 	public String toString() {
 		String s = "";
-		for (int d : this) {
-			s += d;
+		for (Object d : this) {
+			s += d.toString();
 			if (this.current != null) {
-				s += " ";
+				s += ", ";
 			}
 		}
 		return s;
 	}
 
 	// Private utilities
-	private void createCurrent(int data) {
+	private void createCurrent(Object data) {
 		current = new Node(data);
 		front = current;
 		back = current;
@@ -292,7 +292,7 @@ public class List implements Iterable<Integer> {
 	}
 
 	// Iteration
-	private class ListIterator implements Iterator<Integer> {
+	private class ListIterator implements Iterator<Object> {
 		List list = null;
 		Node tmpCurrent = null;
 		int tmpPrevCount = -1, tmpNextCount = -1;
@@ -317,14 +317,14 @@ public class List implements Iterable<Integer> {
 			}
 		}
 
-		public Integer next() {
-			Integer toReturn = list.get();
+		public Object next() {
+			Object toReturn = list.get();
 			list.moveNext();
 			return toReturn;
 		}
 	}
 
-	public Iterator<Integer> iterator() {
+	public Iterator<Object> iterator() {
 		return new ListIterator(this);
 	}
 }
