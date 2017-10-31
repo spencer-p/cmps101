@@ -66,30 +66,10 @@ public class List implements Iterable<Object> {
 		}
 	}
 
-	public boolean equals(List L) {
-		// Lists of different lengths are never equal
-		if (L.length() != length()) {
-			return false;
-		}
-
-		// Scrub both to front
-		moveFront();
-		L.moveFront();
-
-		while(index() >= 0) {
-			// Early exit if any are not equal
-			if (!get().equals(L.get())) {
-				return false;
-			}
-
-			// next
-			moveNext();
-			L.moveNext();
-		}
-
-		// Everything was equal
-		return true;
-	}
+    public boolean equals(Object o) {
+        // True if they are the same object
+        return o == this;
+    }
 
 	// Mutability
 	public void clear() {
