@@ -1,14 +1,17 @@
 # Makefile
+# Author: Spencer Peterson
+# cruzid: spjpeter
+#
+# all builds all classes.
+# runtests will run all the unit tests.
 
 SRC_TARGETS=List.class Matrix.class
 TEST_TARGETS=TestList.class TestMatrix.class
 
 # Libraries for testing
-ifdef DEBUG
 JUNIT=/usr/share/java/junit.jar
-HAMCREST=/usr/share/java/hamcrest-core.jar
+HAMCREST=/usr/share/java/hamcrest/core.jar
 JAVA_LIB_OPTIONS=-cp .:$(JUNIT):$(HAMCREST)
-endif
 
 JAVA_OPTIONS=-Xlint $(JAVA_LIB_OPTIONS)
 
@@ -16,7 +19,7 @@ JAVA_OPTIONS=-Xlint $(JAVA_LIB_OPTIONS)
 
 .INTERMEDIATE: Manifest
 
-all: $(SRC_TARGETS)
+all: $(SRC_TARGETS) tests
 
 tests: $(SRC_TARGETS) $(TEST_TARGETS)
 
