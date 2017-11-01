@@ -5,22 +5,22 @@ import org.junit.Test;
 import org.junit.Before;
 
 public class TestMatrix {
-	Matrix m;
+    Matrix m;
 
-	@Before
-	public void setup() {
-		this.m = new Matrix(3);
-	}
+    @Before
+    public void setup() {
+        this.m = new Matrix(3);
+    }
 
-	@Test
-	public void initialSize() {
-		assertEquals(3, m.getSize());
-	}
+    @Test
+    public void initialSize() {
+        assertEquals(3, m.getSize());
+    }
 
-	@Test
-	public void initialNNZ() {
+    @Test
+    public void initialNNZ() {
         assertEquals(0, m.getNNZ());
-	}
+    }
 
     @Test
     public void getEntry() {
