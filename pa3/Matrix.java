@@ -36,6 +36,24 @@ public class Matrix {
     }
 
     /*
+     * Get method for (row, col) of Matrix - for unit tests
+     */
+    public double getEntry(int row, int column) {
+        if (row > getSize() || column > getSize()) {
+            throw new IndexOutOfBoundsException("Matrix: getEntry() out of bounds");
+        }
+        List r = getRow(row);
+        if (r != null) {
+            for (r.moveFront(); r.index() != -1; r.moveNext()) {
+                if (((Entry) r.get()).column == column) {
+                    return ((Entry) r.get()).value;
+                }
+            }
+        }
+        return 0;
+    }
+
+    /*
      * Strict equality
      */
     public boolean equals(Object o) {
@@ -65,6 +83,37 @@ public class Matrix {
             throw new IndexOutOfBoundsException("Matrix: changeEntry() outside of bounds");
         }
 
+        List r = getRow(i);
+        if (r == null && x != 0) {
+            // If the row doesn't exist, create it (as long as the value != 0)
+            r = createRow(i);
+            r.append(new Entry(i, j, x));
+            return;
+        }
+        else if (r != null) {
+            for (r.moveFront(); r.index() != -1; r.moveNext()) {
+                Entry e = (Entry) r.get();
+                if (e.column > j) {
+                    r.insertBefore(new Entry(i, j, x));
+                    return;
+                }
+                else if (e.column == j) {
+                    if (x != 0) {
+                        e.value = x;
+                        return;
+                    }
+                    else {
+                        // Remove the element
+                        r.delete();
+                        // Remove list if necessary
+                        if (r.length() == 0) {
+                            deleteRow(r);
+                        }
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     /*
@@ -116,5 +165,96 @@ public class Matrix {
      */
     public String toString() {
         return "";
+    }
+
+    /*
+     * Get the ith row of the matrix.
+     * If it does not exist, returns null.
+     */
+    private List getRow(int i) {
+        // Scrub to the correct position
+        // This while either go to 1. The end of the list, or
+        // 2. A row equal to or past row i
+        rows.moveFront();
+        while (rows.index() != -1) {
+
+            // Check if this row is past or equal
+            // First we scrub to its front, then check the row on element 1
+            List r = (List) rows.get();
+            r.moveFront();
+            if (((Entry) r.get()).row >= i) {
+                break;
+            }
+
+            rows.moveNext();
+        }
+
+        // Determine what we found
+        if (rows.index() == -1 || ((Entry)((List) rows.get()).get()).row > i) {
+            // Off the end or the row wasn't in there
+            return null;
+        }
+        else {
+            // rows should be scrubbed exactly to the correct row
+            return (List) rows.get();
+        }
+    }
+
+    /*
+     * Creates the new row at row i.
+     * Returns the new row for immediate use.
+     * Assumes that row i does not already exist.
+     */
+    private List createRow(int i) {
+        // Follows a similar pattern to getRow().
+        rows.moveFront();
+        while (rows.index() != -1) {
+            List r = (List) rows.get();
+            r.moveFront();
+            if (((Entry) r.get()).row >= i) {
+                break;
+            }
+
+            rows.moveNext();
+        }
+
+        // New list to return
+        List newRow = new List();
+
+        if (rows.index() == -1) {
+            // If we ran off the edge, put it there
+            rows.append(newRow);
+        }
+        else {
+            // The new list goes right before the current cursor
+            rows.insertBefore(newRow);
+        }
+
+        return newRow;
+    }
+
+    /*
+     * Deletes a row if it exists.
+     */
+    private void deleteRow(List rowToDelete) {
+        // Follows a similar pattern to getRow().
+        rows.moveFront();
+        while (rows.index() != -1) {
+            if ((List) rows.get() == rowToDelete) {
+                rows.delete();
+                return;
+            }
+            rows.moveNext();
+        }
+    }
+
+    private class Entry {
+        int row, column;
+        double value;
+        Entry(int row, int column, double value) {
+            this.row = row;
+            this.column = column;
+            this.value = value;
+        }
     }
 }
