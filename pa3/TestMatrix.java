@@ -77,4 +77,22 @@ public class TestMatrix {
         assertEquals(2, m.getEntry(1, 1), 0);
         assertEquals(1, m.getEntry(1, 3), 0);
     }
+
+    @Test
+    public void makeString() {
+        m.changeEntry(1, 1, 2);
+        m.changeEntry(1, 3, 1);
+        m.changeEntry(3, 2, 3);
+        assertEquals(3, m.getNNZ());
+        assertEquals("2.0 0 1.0\n0 0 0\n0 3.0 0\n", m.toString());
+
+        // Try again with dimension increased by 1
+        m = new Matrix(4);
+        m.changeEntry(1, 1, 2);
+        m.changeEntry(1, 3, 1);
+        m.changeEntry(3, 2, 3);
+        assertEquals(3, m.getNNZ());
+        assertEquals("2.0 0 1.0 0\n0 0 0 0\n0 3.0 0 0\n0 0 0 0\n",
+                m.toString());
+    }
 }
