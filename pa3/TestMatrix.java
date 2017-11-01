@@ -94,5 +94,9 @@ public class TestMatrix {
         assertEquals(3, m.getNNZ());
         assertEquals("2.0 0 1.0 0\n0 0 0 0\n0 3.0 0 0\n0 0 0 0\n",
                 m.toString());
+
+        // Try again with an empty matrix
+        m = new Matrix(2);
+        assertEquals("0 0\n0 0\n", m.toString());
     }
 }
