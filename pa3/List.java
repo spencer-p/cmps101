@@ -41,7 +41,7 @@ public class List implements Iterable<Object> {
 
 	public Object front() {
 		if (front == null) {
-			throw new IndexOutOfBoundsException("front() from empty list");
+			throw new IndexOutOfBoundsException("List: front() from empty list");
 		}
 		else {
 			return front.data;
@@ -50,7 +50,7 @@ public class List implements Iterable<Object> {
 
 	public Object back() {
 		if (back == null) {
-			throw new IndexOutOfBoundsException("back() from empty list");
+			throw new IndexOutOfBoundsException("List: back() from empty list");
 		}
 		else {
 			return back.data;
@@ -59,7 +59,7 @@ public class List implements Iterable<Object> {
 
 	public Object get() {
 		if (current == null) {
-			throw new IndexOutOfBoundsException("get() from null cursor");
+			throw new IndexOutOfBoundsException("List: get() from null cursor");
 		}
 		else {
 			return current.data;
@@ -183,7 +183,7 @@ public class List implements Iterable<Object> {
 
 	public void deleteFront() {
 		if (length() <= 0) {
-			throw new IndexOutOfBoundsException("deleteFront() from empty list");
+			throw new IndexOutOfBoundsException("List: deleteFront() from empty list");
 		}
 
 		// Clear current if it's the front
@@ -205,7 +205,7 @@ public class List implements Iterable<Object> {
 
 	public void deleteBack() {
 		if (length() <= 0) {
-			throw new IndexOutOfBoundsException("deleteBack() from empty list");
+			throw new IndexOutOfBoundsException("List: deleteBack() from empty list");
 		}
 
 		// Clear current if necessary
@@ -222,7 +222,7 @@ public class List implements Iterable<Object> {
 
 	public void delete() {
 		if (length() <= 0 || length() < 0) {
-			throw new IndexOutOfBoundsException("delete() from empty list");
+			throw new IndexOutOfBoundsException("List: delete() from empty list");
 		}
 		// Close previous
 		if (current.prev != null) {
