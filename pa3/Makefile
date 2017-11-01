@@ -1,7 +1,7 @@
 # Makefile
 
-SRC_TARGETS=List.class
-TEST_TARGETS=TestList.class
+SRC_TARGETS=List.class Matrix.class
+TEST_TARGETS=TestList.class TestMatrix.class
 
 # Libraries for testing
 ifdef DEBUG
@@ -21,7 +21,7 @@ all: $(SRC_TARGETS)
 tests: $(SRC_TARGETS) $(TEST_TARGETS)
 
 runtests: tests
-	java $(JAVA_LIB_OPTIONS) org.junit.runner.JUnitCore TestList
+	java $(JAVA_LIB_OPTIONS) org.junit.runner.JUnitCore TestList TestMatrix
 
 clean:
 	rm -rf *.class
