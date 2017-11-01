@@ -113,6 +113,8 @@ public class Matrix {
                     }
                 }
             }
+            // Scrubbed through entire row, therefore the entry must go at end
+            r.append(new Entry(i, j, x));
         }
     }
 

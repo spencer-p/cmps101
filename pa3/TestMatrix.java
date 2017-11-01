@@ -59,4 +59,22 @@ public class TestMatrix {
         assertEquals(0, m.getNNZ());
         assertEquals(0, m.getEntry(1, 1), 0);
     }
+
+    @Test
+    public void changeEntryRowAppend() {
+        m.changeEntry(1, 1, 2);
+        m.changeEntry(1, 3, 1);
+        assertEquals(2, m.getNNZ());
+        assertEquals(2, m.getEntry(1, 1), 0);
+        assertEquals(1, m.getEntry(1, 3), 0);
+    }
+
+    @Test
+    public void changeEntryRowPrepend() {
+        m.changeEntry(1, 3, 1);
+        m.changeEntry(1, 1, 2);
+        assertEquals(2, m.getNNZ());
+        assertEquals(2, m.getEntry(1, 1), 0);
+        assertEquals(1, m.getEntry(1, 3), 0);
+    }
 }
