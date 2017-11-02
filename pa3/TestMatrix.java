@@ -110,4 +110,23 @@ public class TestMatrix {
         m.makeZero();
         assertEquals(0, m.getNNZ());
     }
+
+    @Test
+    public void emptyCopy() {
+        Matrix n = m.copy();
+        assertEquals(0, n.getNNZ());
+        assertEquals(0, m.getEntry(1, 1), 0);
+    }
+
+    @Test
+    public void nonEmptyCopy() {
+        m.changeEntry(1, 1, 2);
+        m.changeEntry(1, 3, 1);
+        m.changeEntry(3, 2, 3);
+
+        Matrix n = m.copy();
+
+        assertEquals(3, n.getNNZ());
+        assertEquals("2.0 0 1.0\n0 0 0\n0 3.0 0\n", n.toString());
+    }
 }

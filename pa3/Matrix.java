@@ -71,7 +71,26 @@ public class Matrix {
      * Returns a new matrix with entries identical to this one
      */
     public Matrix copy() {
-        return new Matrix(0);
+        // Initialize empty matrix
+        Matrix newMatrix = new Matrix(getSize());
+
+        // Loop through this's rows
+        for (rows.moveFront(); rows.index() != -1; rows.moveNext()) {
+            // Get current row, create new current row
+            List r = (List) rows.get();
+            List newRow = new List();
+
+            // Fill the newRow with the old row's entries
+            for (r.moveFront(); r.index() != -1; r.moveNext()) {
+                Entry e = (Entry) r.get();
+                newRow.append(new Entry(e.row, e.column, e.value));
+            }
+
+            // Add the new row to the new matrix
+            newMatrix.rows.append(newRow);
+        }
+
+        return newMatrix;
     }
 
     /*
