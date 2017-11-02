@@ -77,6 +77,8 @@ public class List implements Iterable<Object> {
         prevCount = 0;
         nextCount = 0;
         current = null;
+        front = null;
+        back = null;
     }
 
     public void moveFront() {

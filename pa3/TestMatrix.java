@@ -99,4 +99,15 @@ public class TestMatrix {
         m = new Matrix(2);
         assertEquals("0 0\n0 0\n", m.toString());
     }
+
+    @Test
+    public void makeZero() {
+        m.changeEntry(1, 1, 2);
+        m.changeEntry(1, 3, 1);
+        m.changeEntry(3, 2, 3);
+        assertEquals(3, m.getNNZ());
+
+        m.makeZero();
+        assertEquals(0, m.getNNZ());
+    }
 }
