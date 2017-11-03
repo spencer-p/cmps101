@@ -82,8 +82,7 @@ public class Matrix {
 
             // Fill the newRow with the old row's entries
             for (r.moveFront(); r.index() != -1; r.moveNext()) {
-                Entry e = (Entry) r.get();
-                newRow.append(new Entry(e.row, e.column, e.value));
+                newRow.append(((Entry) r.get()).copy());
             }
 
             // Add the new row to the new matrix
@@ -357,6 +356,10 @@ public class Matrix {
             this.row = row;
             this.column = column;
             this.value = value;
+        }
+
+        Entry copy() {
+            return new Entry(this.row, this.column, this.value);
         }
     }
 }
