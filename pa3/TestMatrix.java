@@ -129,4 +129,60 @@ public class TestMatrix {
         assertEquals(3, n.getNNZ());
         assertEquals("2.0 0 1.0\n0 0 0\n0 3.0 0\n", n.toString());
     }
+
+    @Test
+    public void add() {
+        /*
+         *  2 0 1   0 0 3
+         *  0 0 0 + 0 0 0
+         *  0 3 0   0 1 0
+         */
+        m.changeEntry(1, 1, 2);
+        m.changeEntry(1, 3, 1);
+        m.changeEntry(3, 2, 3);
+
+        Matrix n = new Matrix(3);
+        n.changeEntry(1, 3, 3);
+        n.changeEntry(3, 2, 1);
+
+        Matrix o = m.add(n);
+
+        assertEquals("2.0 0 4.0\n0 0 0\n0 4.0 0\n", o.toString());
+    }
+
+    @Test
+    public void sub() {
+        /*
+         *  2 0 1   0 0 3
+         *  0 0 0 - 0 0 0
+         *  0 3 0   0 1 0
+         */
+        m.changeEntry(1, 1, 2);
+        m.changeEntry(1, 3, 1);
+        m.changeEntry(3, 2, 3);
+
+        Matrix n = new Matrix(3);
+        n.changeEntry(1, 3, 3);
+        n.changeEntry(3, 2, 1);
+
+        Matrix o = m.sub(n);
+
+        assertEquals("2.0 0 -2.0\n0 0 0\n0 2.0 0\n", o.toString());
+    }
+
+    @Test
+    public void scalarMult() {
+        /*
+         *  2 0 1
+         *  0 0 0 x 2
+         *  0 3 0
+         */
+        m.changeEntry(1, 1, 2);
+        m.changeEntry(1, 3, 1);
+        m.changeEntry(3, 2, 3);
+
+        Matrix n = m.scalarMult(2);
+
+        assertEquals("4.0 0 2.0\n0 0 0\n0 6.0 0\n", n.toString());
+    }
 }

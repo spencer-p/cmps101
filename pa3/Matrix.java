@@ -140,7 +140,7 @@ public class Matrix {
      * Returns a new matrix that equals this matrix * x
      */
     Matrix scalarMult(double x) {
-        return new Matrix(0);
+        return (new Matrix(getSize())).addScalarMultiple(this, x);
     }
 
     /*
@@ -150,7 +150,7 @@ public class Matrix {
         if (getSize() != M.getSize()) {
             throw new IndexOutOfBoundsException("Matrix: add() dimensions are inequal");
         }
-        return new Matrix(0);
+        return addScalarMultiple(M, 1);
     }
 
     /*
@@ -160,7 +160,7 @@ public class Matrix {
         if (getSize() != M.getSize()) {
             throw new IndexOutOfBoundsException("Matrix: sub() dimensions are inequal");
         }
-        return new Matrix(0);
+        return addScalarMultiple(M, -1);
     }
 
     /*
@@ -347,6 +347,98 @@ public class Matrix {
             }
             rows.moveNext();
         }
+    }
+
+    /*
+     * Adds matrix A to B*x.
+     */
+    private Matrix addScalarMultiple(Matrix B, double x) {
+        // The sizes of this and Matrix B *will* be checked beforehand
+        Matrix C = new Matrix(getSize());
+
+        // Iterate through both matrices' rows
+        this.rows.moveFront();
+        B.rows.moveFront();
+        while (B.rows.index() != -1 || this.rows.index() != -1) {
+            
+            // First we'll identify the row number of each matrix,
+            // if it still has a row (otherwise -1)
+            int BNextRow = -1, thisNextRow = -1;
+            List thisRow = null, BRow = null;
+            if (B.rows.index() != -1) {
+                BRow = (List) B.rows.get();
+                BRow.moveFront();
+                BNextRow = ((Entry) BRow.get()).row;
+            }
+            if (this.rows.index() != -1) {
+                thisRow = (List) this.rows.get();
+                thisRow.moveFront();
+                thisNextRow = ((Entry) thisRow.get()).row;
+            }
+
+            // Empty new row to be filled
+            List newRow = new List();
+
+            if (thisRow == null || (BNextRow < thisNextRow && BRow != null)) {
+                // Case 1: Adding a zero row to a row from B
+                for (BRow.moveFront(); BRow.index() != -1; BRow.moveNext()) {
+                    Entry e = ((Entry) BRow.get()).copy();
+                    e.value *= x;
+                    newRow.append(e);
+                }
+                B.rows.moveNext();
+            }
+            else if (BRow == null || (thisNextRow < BNextRow && thisRow != null)) {
+                // Case 2: Adding a zero row to a row from this
+                for (thisRow.moveFront(); thisRow.index() != -1; thisRow.moveNext()) {
+                    newRow.append(((Entry) thisRow.get()).copy());
+                }
+                this.rows.moveNext();
+            }
+            else /* thisRow == BRow */ {
+                // Case 3: Adding nonzero rows
+                while (thisRow.index() != -1 && BRow.index() != -1) {
+                    // Get entries
+                    Entry BEntry = null, thisEntry = null;
+                    if (BRow.index() != -1) {
+                        // pull from B
+                        BEntry = (Entry) BRow.get();
+                    }
+                    if (thisRow.index() != -1) {
+                        // pull from this
+                        thisEntry = (Entry) thisRow.get();
+                    }
+
+                    if (thisEntry == null || (BEntry != null && BEntry.column < thisEntry.column)) {
+                        // Case 1: Take Entry from B
+                        Entry e = ((Entry) BRow.get()).copy();
+                        e.value *= x;
+                        newRow.append(e);
+                        BRow.moveNext();
+                    }
+                    else if (BEntry == null || (thisEntry != null && thisEntry.column < BEntry.column)) {
+                        // Case 2: Take Entry from this
+                        newRow.append(((Entry) thisRow.get()).copy());
+                        thisRow.moveNext();
+                    }
+                    else /* thisEntry.column == BEntry.column */ {
+                        // Case 3: The entries must be added
+                        Entry e = ((Entry) thisRow.get()).copy();
+                        e.value += x * ((Entry) BRow.get()).value;
+                        newRow.append(e);
+                        thisRow.moveNext();
+                        BRow.moveNext();
+                    }
+                }
+                B.rows.moveNext();
+                this.rows.moveNext();
+            }
+
+            // Insert the new row
+            C.rows.append(newRow);
+        }
+
+        return C;
     }
 
     private class Entry {
