@@ -6,8 +6,8 @@
  */
 
 public class Matrix {
-    List rows;
-    int n;
+    private List rows;
+    private int n;
 
     /*
      * Constructs an nxn matrix.
