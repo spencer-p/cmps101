@@ -2,12 +2,13 @@
 # Author: Spencer Peterson
 # cruzid: spjpeter
 #
-# 'all' builds all classes.
+# 'all' builds all classes and jar (except unit tests).
 # 'runtests' will run all the unit tests.
 # 'Matrix.runtest' will run only the Matrix unit tests
 
 SRC_TARGETS=List.class Matrix.class Sparse.class
 TEST_TARGETS=ListTest.class MatrixTest.class
+JAR=Sparse
 
 # Libraries for testing
 JUNIT=/usr/share/java/junit.jar
@@ -20,7 +21,14 @@ JAVA_OPTIONS=-Xlint $(JAVA_LIB_OPTIONS)
 
 .INTERMEDIATE: Manifest
 
-all: $(SRC_TARGETS) tests
+all: $(SRC_TARGETS) $(JAR)
+
+$(JAR): $(SRC_TARGETS) Manifest
+	jar cvfm $@ Manifest *.class
+	chmod +x $@
+
+Manifest:
+	echo "Main-class: $(JAR)" > Manifest
 
 tests: $(SRC_TARGETS) $(TEST_TARGETS)
 
