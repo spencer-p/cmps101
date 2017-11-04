@@ -185,4 +185,21 @@ public class TestMatrix {
 
         assertEquals("4.0 0 2.0\n0 0 0\n0 6.0 0\n", n.toString());
     }
+
+    @Test
+    public void tranpose() {
+        /*
+         *  2 0 1    2 0 0
+         *  0 0 0 -> 0 0 3
+         *  0 3 0    1 0 0
+         */
+        m.changeEntry(1, 1, 2);
+        m.changeEntry(1, 3, 1);
+        m.changeEntry(3, 2, 3);
+
+        Matrix n = m.transpose();
+
+        assertEquals("2.0 0 0\n0 0 3.0\n1.0 0 0\n", n.toString());
+    }
+
 }

@@ -170,7 +170,18 @@ public class Matrix {
      * Returns this matrix transposed (rotated)
      */
     Matrix transpose() {
-        return new Matrix(0);
+        Matrix transposed = new Matrix(getSize());
+
+        // Naive use of changeEntry, may not be O(n + a)
+        for (rows.moveFront(); rows.index() != -1; rows.moveNext()) {
+            List r = (List) rows.get();
+            for (r.moveFront(); r.index() != -1; r.moveNext()) {
+                Entry e = (Entry) r.get();
+                transposed.changeEntry(e.column, e.row, e.value);
+            }
+        }
+
+        return transposed;
     }
 
     /*
@@ -363,7 +374,7 @@ public class Matrix {
         this.rows.moveFront();
         B.rows.moveFront();
         while (B.rows.index() != -1 || this.rows.index() != -1) {
-            
+
             // First we'll identify the row number of each matrix,
             // if it still has a row (otherwise -1)
             int BNextRow = -1, thisNextRow = -1;
