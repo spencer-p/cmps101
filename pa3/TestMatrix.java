@@ -202,4 +202,26 @@ public class TestMatrix {
         assertEquals("2.0 0 0\n0 0 3.0\n1.0 0 0\n", n.toString());
     }
 
+    @Test
+    public void multiply() {
+        /*
+         *  2 0 1   4 0 0   13 0  9
+         *  0 0 0 x 0 8 1 = 0  0  0
+         *  0 3 0   5 0 9   0  24 3
+         */
+        m.changeEntry(1, 1, 2);
+        m.changeEntry(1, 3, 1);
+        m.changeEntry(3, 2, 3);
+
+        Matrix n = new Matrix(m.getSize());
+        n.changeEntry(1, 1, 4);
+        n.changeEntry(2, 2, 8);
+        n.changeEntry(2, 3, 1);
+        n.changeEntry(3, 1, 5);
+        n.changeEntry(3, 3, 9);
+
+        Matrix o = m.mult(n);
+
+        assertEquals("13.0 0 9.0\n0 0 0\n0 24.0 3.0\n", o.toString());
+    }
 }

@@ -191,7 +191,49 @@ public class Matrix {
         if (getSize() != M.getSize()) {
             throw new IndexOutOfBoundsException("Matrix: mult() dimensions are inequal");
         }
-        return new Matrix(0);
+
+        Matrix newMatrix = new Matrix(getSize());
+
+        // First rotate M so that its columns are now rows
+        M = M.transpose();
+
+        // Loop through this's rows
+        this.rows.moveFront();
+        while (this.rows.index() != -1) {
+
+            // Get this row and its index
+            List thisRow = (List) this.rows.get();
+            thisRow.moveFront();
+            int thisRowNumber = ((Entry) thisRow.get()).row;
+
+            // Create new row for new matrix
+            List newRow = new List();
+
+            // Loop through M's rows (actually columns)
+            M.rows.moveFront();
+            while (M.rows.index() != -1) {
+                List MRow = (List) M.rows.get();
+                MRow.moveFront();
+                int MRowNumber = ((Entry) MRow.get()).row;
+
+                // Do the dot product and insert it (if it's nonzero)
+                double newVal = dotProduct(thisRow, MRow);
+                if (newVal != 0) {
+                    newRow.append(new Entry(thisRowNumber, MRowNumber, newVal));
+                }
+
+                // Move to next row
+                M.rows.moveNext();
+            }
+
+            // Insert the new row
+            newMatrix.rows.append(newRow);
+
+            // Go to next row
+            this.rows.moveNext();
+        }
+
+        return newMatrix;
     }
 
     /*
@@ -453,6 +495,30 @@ public class Matrix {
         }
 
         return C;
+    }
+
+    private double dotProduct(List A, List B) {
+        double product = 0;
+
+        A.moveFront();
+        B.moveFront();
+        while (A.index() != -1 && B.index() != -1) {
+            Entry Ae = (Entry) A.get();
+            Entry Be = (Entry) B.get();
+            if (Ae.column == Be.column) {
+                product += Ae.value * Be.value;
+                A.moveNext();
+                B.moveNext();
+            }
+            else if (Ae.column < Be.column) {
+                A.moveNext();
+            }
+            else /* Be.column < Ae.column */ {
+                B.moveNext();
+            }
+        }
+
+        return product;
     }
 
     private class Entry {
