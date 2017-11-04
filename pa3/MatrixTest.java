@@ -11,7 +11,7 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 import org.junit.Before;
 
-public class TestMatrix {
+public class MatrixTest {
     Matrix m;
 
     @Before
