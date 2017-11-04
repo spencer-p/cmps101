@@ -57,7 +57,64 @@ public class Matrix {
      * Strict equality
      */
     public boolean equals(Object o) {
-        return o == this;
+        // If not the same class, they are not equal
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+
+        // Literally same object, must be equal
+        if (o == this) {
+            return true;
+        }
+
+        // Cast o to a matrix
+        Matrix M = (Matrix) o;
+
+        // Matrices of different sizes cannot be equal
+        if (this.getSize() != M.getSize()) {
+            return false;
+        }
+
+        // Matrices with different counts of NNZ are unequal
+        if (this.getNNZ() != M.getNNZ()) {
+            return false;
+        }
+
+        // If the row space is different they cannot be equal
+        if (this.rows.length() != M.rows.length()) {
+            return false;
+        }
+
+        // Loop through entries
+        for (this.rows.moveFront(), M.rows.moveFront();
+                this.rows.index() != -1 && M.rows.index() != -1;
+                this.rows.moveNext(), M.rows.moveNext()) {
+
+            List thisRow = (List) this.rows.get();
+            List MRow = (List) M.rows.get();
+
+            // Unequal amounts of NNZ, fail
+            if (thisRow.length() != MRow.length()) {
+                return false;
+            }
+
+            for (thisRow.moveFront(), MRow.moveFront();
+                    thisRow.index() != -1 && MRow.index() != -1;
+                    thisRow.moveNext(), MRow.moveNext()) {
+
+                Entry thisEntry = (Entry) thisRow.get();
+                Entry MEntry = (Entry) MRow.get();
+
+                // If these entries are not equal then fail
+                if (!thisEntry.equals(MEntry)) {
+                    return false;
+                }
+            }
+
+        }
+
+        // They must be equal
+        return true;
     }
 
     /*
@@ -476,6 +533,12 @@ public class Matrix {
 
         Entry copy() {
             return new Entry(this.row, this.column, this.value);
+        }
+
+        boolean equals(Entry e) {
+            return this.row == e.row
+                && this.column == e.column
+                && this.value == e.value;
         }
     }
 }
