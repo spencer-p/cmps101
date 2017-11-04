@@ -378,7 +378,9 @@ public class Matrix {
                 for (BRow.moveFront(); BRow.index() != -1; BRow.moveNext()) {
                     Entry e = ((Entry) BRow.get()).copy();
                     e.value *= x;
-                    newRow.append(e);
+                    if (e.value != 0) {
+                        newRow.append(e);
+                    }
                 }
                 B.rows.moveNext();
             }
@@ -407,7 +409,9 @@ public class Matrix {
                         // Case 1: Take Entry from B
                         Entry e = ((Entry) BRow.get()).copy();
                         e.value *= x;
-                        newRow.append(e);
+                        if (e.value != 0) {
+                            newRow.append(e);
+                        }
                         BRow.moveNext();
                     }
                     else if (BEntry == null || (thisEntry != null && thisEntry.column < BEntry.column)) {
@@ -419,7 +423,9 @@ public class Matrix {
                         // Case 3: The entries must be added
                         Entry e = ((Entry) thisRow.get()).copy();
                         e.value += x * ((Entry) BRow.get()).value;
-                        newRow.append(e);
+                        if (e.value != 0) {
+                            newRow.append(e);
+                        }
                         thisRow.moveNext();
                         BRow.moveNext();
                     }
