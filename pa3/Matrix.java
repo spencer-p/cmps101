@@ -199,7 +199,7 @@ public class Matrix {
 
         // Loop through this's rows
         this.rows.moveFront();
-        while (this.rows.index() != -1) {
+        for (this.rows.moveFront(); this.rows.index() != -1; this.rows.moveNext()) {
 
             // Get this row and its index
             List thisRow = (List) this.rows.get();
@@ -210,8 +210,7 @@ public class Matrix {
             List newRow = new List();
 
             // Loop through M's rows (actually columns)
-            M.rows.moveFront();
-            while (M.rows.index() != -1) {
+            for (M.rows.moveFront(); M.rows.index() != -1; M.rows.moveNext()) {
                 List MRow = (List) M.rows.get();
                 MRow.moveFront();
                 int MRowNumber = ((Entry) MRow.get()).row;
@@ -221,16 +220,10 @@ public class Matrix {
                 if (newVal != 0) {
                     newRow.append(new Entry(thisRowNumber, MRowNumber, newVal));
                 }
-
-                // Move to next row
-                M.rows.moveNext();
             }
 
             // Insert the new row
             newMatrix.rows.append(newRow);
-
-            // Go to next row
-            this.rows.moveNext();
         }
 
         return newMatrix;
@@ -332,8 +325,7 @@ public class Matrix {
         // Scrub to the correct position
         // This while either go to 1. The end of the list, or
         // 2. A row equal to or past row i
-        rows.moveFront();
-        while (rows.index() != -1) {
+        for (rows.moveFront(); rows.index() != -1; rows.moveNext()) {
 
             // Check if this row is past or equal
             // First we scrub to its front, then check the row on element 1
@@ -342,8 +334,6 @@ public class Matrix {
             if (((Entry) r.get()).row >= i) {
                 break;
             }
-
-            rows.moveNext();
         }
 
         // Determine what we found
@@ -364,15 +354,12 @@ public class Matrix {
      */
     private List createRow(int i) {
         // Follows a similar pattern to getRow().
-        rows.moveFront();
-        while (rows.index() != -1) {
+        for (rows.moveFront(); rows.index() != -1; rows.moveNext()) {
             List r = (List) rows.get();
             r.moveFront();
             if (((Entry) r.get()).row >= i) {
                 break;
             }
-
-            rows.moveNext();
         }
 
         // New list to return
@@ -395,13 +382,11 @@ public class Matrix {
      */
     private void deleteRow(List rowToDelete) {
         // Follows a similar pattern to getRow().
-        rows.moveFront();
-        while (rows.index() != -1) {
+        for (rows.moveFront(); rows.index() != -1; rows.moveNext()) {
             if ((List) rows.get() == rowToDelete) {
                 rows.delete();
                 return;
             }
-            rows.moveNext();
         }
     }
 
