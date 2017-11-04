@@ -153,6 +153,10 @@ public class Matrix {
         if (getSize() != M.getSize()) {
             throw new IndexOutOfBoundsException("Matrix: add() dimensions are inequal");
         }
+        if (M == this) {
+            // To avoid List issues
+            M = M.copy();
+        }
         return addScalarMultiple(M, 1);
     }
 
@@ -162,6 +166,10 @@ public class Matrix {
     public Matrix sub(Matrix M) {
         if (getSize() != M.getSize()) {
             throw new IndexOutOfBoundsException("Matrix: sub() dimensions are inequal");
+        }
+        if (M == this) {
+            // To avoid List issues
+            M = M.copy();
         }
         return addScalarMultiple(M, -1);
     }
@@ -190,6 +198,10 @@ public class Matrix {
     public Matrix mult(Matrix M) {
         if (getSize() != M.getSize()) {
             throw new IndexOutOfBoundsException("Matrix: mult() dimensions are inequal");
+        }
+        if (M == this) {
+            // To avoid List issues
+            M = M.copy();
         }
 
         Matrix newMatrix = new Matrix(getSize());
