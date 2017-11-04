@@ -1,8 +1,8 @@
 /*
  * Matrix.java
- * Implements a fast, sparse matrix object
- * Copyright (C) 2017 Spencer Peterson
+ * Author: Spencer Peterson
  * cruzid: spjpeter
+ * Implements a fast, sparse matrix object
  */
 
 public class Matrix {

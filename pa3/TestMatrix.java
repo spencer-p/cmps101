@@ -1,3 +1,10 @@
+/*
+ * MatrixTest.java
+ * Author: Spencer Peterson
+ * cruzid: spjpeter
+ * Unit tests for Matrix.
+ */
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;

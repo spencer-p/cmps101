@@ -1,7 +1,8 @@
 /*
  * List.java
- *
- * Copyright (C) 2017, Spencer Peterson
+ * Author: Spencer Peterson
+ * cruzid: spjpeter
+ * Implements a doubly linked list of Objects.
  */
 
 import java.util.Iterator;
