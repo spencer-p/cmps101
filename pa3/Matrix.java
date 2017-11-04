@@ -95,7 +95,7 @@ public class Matrix {
     /*
      * Sets the entry at (i, j) to x
      */
-    void changeEntry(int i, int j, double x) {
+    public void changeEntry(int i, int j, double x) {
         // Check i, j is in the matrix first
         if (i > getSize() || j > getSize()) {
             throw new IndexOutOfBoundsException("Matrix: changeEntry() outside of bounds");
@@ -139,7 +139,7 @@ public class Matrix {
     /*
      * Returns a new matrix that equals this matrix * x
      */
-    Matrix scalarMult(double x) {
+    public Matrix scalarMult(double x) {
         // This (ab)uses the addScalar method by creating a zero matrix and
         // adding this matrix times x to it. The cost of creating a zero matrix
         // is O(1), so no time is lost by this method.
@@ -149,7 +149,7 @@ public class Matrix {
     /*
      * Returns a new matrix, the sum of this and M
      */
-    Matrix add(Matrix M) {
+    public Matrix add(Matrix M) {
         if (getSize() != M.getSize()) {
             throw new IndexOutOfBoundsException("Matrix: add() dimensions are inequal");
         }
@@ -159,7 +159,7 @@ public class Matrix {
     /*
      * Returns a new matrix this minus M
      */
-    Matrix sub(Matrix M) {
+    public Matrix sub(Matrix M) {
         if (getSize() != M.getSize()) {
             throw new IndexOutOfBoundsException("Matrix: sub() dimensions are inequal");
         }
@@ -169,7 +169,7 @@ public class Matrix {
     /*
      * Returns this matrix transposed (rotated)
      */
-    Matrix transpose() {
+    public Matrix transpose() {
         Matrix transposed = new Matrix(getSize());
 
         // Naive use of changeEntry, may not be O(n + a)
@@ -187,7 +187,7 @@ public class Matrix {
     /*
      * Returns a matrix that is the product of this and M
      */
-    Matrix mult(Matrix M) {
+    public Matrix mult(Matrix M) {
         if (getSize() != M.getSize()) {
             throw new IndexOutOfBoundsException("Matrix: mult() dimensions are inequal");
         }
