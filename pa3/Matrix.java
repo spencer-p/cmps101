@@ -233,85 +233,26 @@ public class Matrix {
      * Overrides Object's toString
      */
     public String toString() {
-        int lastRow = 0;
-        int lastColumn = 0;
-
         String matrixString = "";
 
         // Iterate through rows
         for (rows.moveFront(); rows.index() != -1; rows.moveNext()) {
-            // Determine which row we're looking at (nextRow)
+            // Determine which row we're looking at (rowNum)
             List r = (List) rows.get();
             r.moveFront();
-            int nextRow = ((Entry) r.get()).row;
+            int rowNum = ((Entry) r.get()).row;
 
-            // If we skipped some rows, throw in some zero rows
-            if (nextRow > lastRow+1) {
-                for (lastRow++; lastRow < nextRow; lastRow++)  {
-                    // Print out a row of zeroes
-                    for (int i = 1; i <= getSize(); i++) {
-                        matrixString += '0';
-                        if (i != getSize()) {
-                            matrixString += ' ';
-                        }
-                    }
-                    matrixString += '\n';
-                }
-            }
+            matrixString += rowNum + ":";
 
             // Iterate through each element in this row
             for (r.moveFront(); r.index() != -1; r.moveNext()) {
-
-                // If we skipped some columns, insert some zero entries
-                if (((Entry) r.get()).column != lastColumn+1) {
-                    // Fill zeroes
-                    int nextCol = ((Entry) r.get()).column;
-                    for (lastColumn++; lastColumn < nextCol; lastColumn++) {
-                        matrixString += '0';
-                        if (lastColumn != nextCol) {
-                            matrixString += ' ';
-                        }
-                    }
-                }
-
                 // Add the entry and a space if necessary
-                matrixString += ((Entry) r.get()).value;
-                if (((Entry) r.get()).column != getSize()) {
-                    matrixString += ' ';
-                }
-
-                // Update the last column placed
-                lastColumn = ((Entry) r.get()).column;
+                Entry e = (Entry) r.get();
+                matrixString += " (" + e.column + ", " + e.value + ")";
             }
 
-            // If the last column didn't reach the end, add some zero entries
-            if (lastColumn < getSize()) {
-                for (lastColumn++; lastColumn <= getSize(); lastColumn++) {
-                    matrixString += '0';
-                    if (lastColumn != getSize()) {
-                        matrixString += ' ';
-                    }
-                }
-            }
-
-            // Update last column and row, append new line
-            lastColumn = 0;
-            lastRow = nextRow;
+            // append new line
             matrixString += '\n';
-        }
-
-        // If the last column didn't reach the end, add some zero rows
-        if (lastColumn < getSize()) {
-            for (; lastRow < getSize(); lastRow++)  {
-                // Print out a row of zeroes
-                for (int i = 1; i <= getSize(); i++) {
-                    matrixString += '0';
-                    if (i != getSize()) {
-                        matrixString += ' ';
-                    }
-                }
-                matrixString += '\n';
-            }
         }
 
         return matrixString;

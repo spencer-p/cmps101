@@ -83,21 +83,25 @@ public class TestMatrix {
         m.changeEntry(1, 1, 2);
         m.changeEntry(1, 3, 1);
         m.changeEntry(3, 2, 3);
-        assertEquals(3, m.getNNZ());
-        assertEquals("2.0 0 1.0\n0 0 0\n0 3.0 0\n", m.toString());
+        assertEquals("1: (1, 2.0) (3, 1.0)\n3: (2, 3.0)\n", m.toString());
+    }
 
+    @Test
+    public void biggerMakeString() {
         // Try again with dimension increased by 1
         m = new Matrix(4);
         m.changeEntry(1, 1, 2);
         m.changeEntry(1, 3, 1);
         m.changeEntry(3, 2, 3);
         assertEquals(3, m.getNNZ());
-        assertEquals("2.0 0 1.0 0\n0 0 0 0\n0 3.0 0 0\n0 0 0 0\n",
-                m.toString());
+        assertEquals("1: (1, 2.0) (3, 1.0)\n3: (2, 3.0)\n", m.toString());
+    }
 
+    @Test
+    public void emptyMakeString() {
         // Try again with an empty matrix
         m = new Matrix(2);
-        assertEquals("0 0\n0 0\n", m.toString());
+        assertEquals("", m.toString());
     }
 
     @Test
@@ -127,7 +131,7 @@ public class TestMatrix {
         Matrix n = m.copy();
 
         assertEquals(3, n.getNNZ());
-        assertEquals("2.0 0 1.0\n0 0 0\n0 3.0 0\n", n.toString());
+        assertEquals("1: (1, 2.0) (3, 1.0)\n3: (2, 3.0)\n", n.toString());
     }
 
     @Test
@@ -147,7 +151,7 @@ public class TestMatrix {
 
         Matrix o = m.add(n);
 
-        assertEquals("2.0 0 4.0\n0 0 0\n0 4.0 0\n", o.toString());
+        assertEquals("1: (1, 2.0) (3, 4.0)\n3: (2, 4.0)\n", o.toString());
     }
 
     @Test
@@ -167,7 +171,7 @@ public class TestMatrix {
 
         Matrix o = m.sub(n);
 
-        assertEquals("2.0 0 -2.0\n0 0 0\n0 2.0 0\n", o.toString());
+        assertEquals("1: (1, 2.0) (3, -2.0)\n3: (2, 2.0)\n", o.toString());
     }
 
     @Test
@@ -183,7 +187,7 @@ public class TestMatrix {
 
         Matrix n = m.scalarMult(2);
 
-        assertEquals("4.0 0 2.0\n0 0 0\n0 6.0 0\n", n.toString());
+        assertEquals("1: (1, 4.0) (3, 2.0)\n3: (2, 6.0)\n", n.toString());
     }
 
     @Test
@@ -199,7 +203,7 @@ public class TestMatrix {
 
         Matrix n = m.transpose();
 
-        assertEquals("2.0 0 0\n0 0 3.0\n1.0 0 0\n", n.toString());
+        assertEquals("1: (1, 2.0)\n2: (3, 3.0)\n3: (1, 1.0)\n", n.toString());
     }
 
     @Test
@@ -222,6 +226,6 @@ public class TestMatrix {
 
         Matrix o = m.mult(n);
 
-        assertEquals("13.0 0 9.0\n0 0 0\n0 24.0 3.0\n", o.toString());
+        assertEquals("1: (1, 13.0) (3, 9.0)\n3: (2, 24.0) (3, 3.0)\n", o.toString());
     }
 }
