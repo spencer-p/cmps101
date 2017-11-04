@@ -140,6 +140,9 @@ public class Matrix {
      * Returns a new matrix that equals this matrix * x
      */
     Matrix scalarMult(double x) {
+        // This (ab)uses the addScalar method by creating a zero matrix and
+        // adding this matrix times x to it. The cost of creating a zero matrix
+        // is O(1), so no time is lost by this method.
         return (new Matrix(getSize())).addScalarMultiple(this, x);
     }
 
