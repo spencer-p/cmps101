@@ -2,10 +2,10 @@
 # Author: Spencer Peterson
 # cruzid: spjpeter
 #
-# all builds all classes.
-# runtests will run all the unit tests.
+# 'all' builds all classes.
+# 'runtests' will run all the unit tests.
 
-SRC_TARGETS=List.class Matrix.class
+SRC_TARGETS=List.class Matrix.class Sparse.class
 TEST_TARGETS=TestList.class TestMatrix.class
 
 # Libraries for testing
