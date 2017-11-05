@@ -291,7 +291,6 @@ public class List implements Iterable<Object> {
                 s += " ";
             }
         }
-		System.out.println(s);
         return s;
     }
 
