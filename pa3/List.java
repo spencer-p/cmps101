@@ -69,7 +69,35 @@ public class List implements Iterable<Object> {
 
     public boolean equals(Object o) {
         // True if they are the same object
-        return o == this;
+        if (o == this) {
+            return true;
+        }
+
+        // False if not same class
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+
+        // o must be a list, cast it
+        List l = (List) o;
+
+        // If the lengths are unequal they cannot be equal
+        if (this.length() != l.length()) {
+            return false;
+        }
+
+        for (this.moveFront(), l.moveFront();
+                this.index() != -1 && l.index() != -1;
+                this.moveNext(), l.moveNext()) {
+
+            // Early exit if possible
+            if (!this.get().equals(l.get())) {
+                return false;
+            }
+        }
+
+        // All entries were equal
+        return true;
     }
 
     // Mutability
@@ -260,9 +288,10 @@ public class List implements Iterable<Object> {
         for (Object d : this) {
             s += d.toString();
             if (this.current != null) {
-                s += ", ";
+                s += " ";
             }
         }
+		System.out.println(s);
         return s;
     }
 

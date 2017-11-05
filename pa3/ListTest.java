@@ -284,7 +284,7 @@ public class ListTest {
         this.l.moveFront();
         this.l.insertBefore(3);
 
-        assertEquals("3, 1, 2", this.l.toString());
+        assertEquals("3 1 2", this.l.toString());
     }
 
     @Test
