@@ -34,7 +34,7 @@ tests: $(SRC_TARGETS) $(TEST_TARGETS)
 
 runtests: List.runtest Matrix.runtest
 
-%.runtest: %Test.class
+%.runtest: tests
 	@echo === Testing class $* ===
 	java $(JAVA_LIB_OPTIONS) org.junit.runner.JUnitCore $*Test
 
