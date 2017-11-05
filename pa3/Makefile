@@ -39,7 +39,7 @@ runtests: List.runtest Matrix.runtest
 	java $(JAVA_LIB_OPTIONS) org.junit.runner.JUnitCore $*Test
 
 clean:
-	rm -rf *.class
+	rm -rf *.class $(JAR)
 
 %.class: %.java
 	javac $(JAVA_OPTIONS) $<
