@@ -168,7 +168,7 @@ public class Matrix {
         else if (r != null) {
             for (r.moveFront(); r.index() != -1; r.moveNext()) {
                 Entry e = (Entry) r.get();
-                if (e.column > j) {
+                if (e.column > j && x != 0) {
                     r.insertBefore(new Entry(i, j, x));
                     return;
                 }
@@ -189,7 +189,9 @@ public class Matrix {
                 }
             }
             // Scrubbed through entire row, therefore the entry must go at end
-            r.append(new Entry(i, j, x));
+            if (x != 0) {
+                r.append(new Entry(i, j, x));
+            }
         }
     }
 
@@ -292,7 +294,9 @@ public class Matrix {
             }
 
             // Insert the new row
-            newMatrix.rows.append(newRow);
+            if (newRow.length() > 0) {
+                newMatrix.rows.append(newRow);
+            }
         }
 
         return newMatrix;
@@ -450,7 +454,7 @@ public class Matrix {
             }
             else /* thisRow == BRow */ {
                 // Case 3: Adding nonzero rows
-                while (thisRow.index() != -1 && BRow.index() != -1) {
+                while (thisRow.index() != -1 || BRow.index() != -1) {
                     // Get entries
                     Entry BEntry = null, thisEntry = null;
                     if (BRow.index() != -1) {
@@ -492,7 +496,9 @@ public class Matrix {
             }
 
             // Insert the new row
-            C.rows.append(newRow);
+            if (newRow.length() > 0) {
+                C.rows.append(newRow);
+            }
         }
 
         return C;
