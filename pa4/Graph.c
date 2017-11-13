@@ -79,8 +79,30 @@ void getPath(List L, Graph G, int u);
 
 /*** Manipulation procedures ***/
 void makeNull(Graph G);
-void addEdge(Graph G, int u, int v);
-void addArc(Graph G, int u, int v);
+void addEdge(Graph G, int u, int v) {
+    if (u < 1 || u > getOrder(G) || v < 1 || v > getOrder(G)) {
+        throw("addEdge: vertex is not in graph order");
+    }
+
+    // An edge is two arcs
+    addArc(G, u, v);
+    addArc(G, v, u);
+}
+
+void addArc(Graph G, int u, int v) {
+    if (u < 1 || u > getOrder(G) || v < 1 || v > getOrder(G)) {
+        throw("addArc: vertex is not in graph order");
+    }
+    List uList = G->adjacents[u];
+
+    for (moveFront(uList); index(uList) != -1; moveNext(uList)) {
+        if (get(uList) > v) {
+            insertBefore(uList, v);
+            break;
+        }
+    }
+}
+
 void BFS(Graph G, int s);
 
 /*** Other operations ***/
