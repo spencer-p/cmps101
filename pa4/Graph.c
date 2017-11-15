@@ -13,6 +13,7 @@
 typedef struct GraphObj {
     int order;
     int size;
+    int bfs_source;
     List *adjacents;
     enum visibility *seen;
     int *parents;
@@ -21,50 +22,26 @@ typedef struct GraphObj {
 
 enum visibility { UNSEEN = 0, ADJACENT, SEEN };
 
+void initInside(Graph G, int n);
+void freeInside(Graph G);
 void throw(const char *err_string);
 void check_null(Graph G, const char *method_name);
 
 /*** Constructors - Destructors ***/
 Graph newGraph(int n) {
     Graph new;
-    int i;
 
     // Create uninitialized graph
     new = malloc(sizeof(GraphObj));
 
-    if (new != NULL) {
+    initInside(new, n);
 
-        // Create the uninitialized adjacency list
-        new->order = n;
-        new->adjacents = malloc(n * sizeof(List));
-
-        if (new->adjacents != NULL) {
-
-            // Initialize each adjacency list
-            for (i = 0; i < n; i++) {
-                new->adjacents[i] = newList();
-            }
-
-            // Done
-            return new;
-        }
-
-        // TODO initialize like everything
-    }
-
-    throw("Failed to allocate new Graph");
-    return NULL;
+    // Done
+    return new;
 }
 
 void freeGraph(Graph *pG) {
-    int i;
-
-    for (i = 0; i < getOrder(*pG); i++) {
-        freeList(&(*pG)->adjacents[i]);
-    }
-
-    // TODO free a lot of other stuff
-
+    freeInside(*pG);
     free(pG);
 }
 
@@ -77,15 +54,55 @@ int getSize(Graph G) {
     return G->size;
 }
 
-int getSource(Graph G);
-int getParent(Graph G, int u);
-int getDist(Graph G, int u);
-void getPath(List L, Graph G, int u);
+int getSource(Graph G) {
+    return G->bfs_source;
+}
+
+int getParent(Graph G, int u) {
+    if (u < 1 || u > getOrder(G)) {
+        throw("getParent: vertex not in graph");
+    }
+    if (G->bfs_source == NIL) {
+        throw("getParent: BFS not yet run");
+    }
+
+    return G->parents[u];
+}
+
+int getDist(Graph G, int u) {
+    if (u < 1 || u > getOrder(G)) {
+        throw("getDist: vertex not in graph");
+    }
+    if (G->bfs_source == NIL) {
+        throw("getDist: BFS not yet run");
+    }
+
+    return G->distance[u];
+}
+
+void getPath(List L, Graph G, int u) {
+    if (u < 1 || u > getOrder(G)) {
+        throw("getPath: vertex not in graph");
+    }
+    if (G->bfs_source == NIL) {
+        throw("getPath: BFS not yet run");
+    }
+
+    // The spec says to append the path to the List, which we'll do by moving
+    // to the back once and repeatedly inserting after, since the parent tree
+    // is reversed.
+    moveBack(L);
+    insertAfter(L, u);
+    for (int walk = G->parents[u]; walk != NIL; walk = G->parents[walk]) {
+        insertAfter(L, walk);
+    }
+}
 
 /*** Manipulation procedures ***/
 void makeNull(Graph G) {
-    // TODO
-    // Steal a whole bunch of stuff from freeGraph and newGraph
+    int order = getOrder(G);
+    freeInside(G);
+    initInside(G, order);
 }
 
 void addEdge(Graph G, int u, int v) {
@@ -188,9 +205,62 @@ void BFS(Graph G, int s) {
 }
 
 /*** Other operations ***/
-void printGraph(FILE* out, Graph G);
+void printGraph(FILE* out, Graph G) {
+    for (int i = 1; i <= getOrder(G); i++) {
+        fprintf(out, "%d: ", i);
+        printList(out, G->adjacents[i]);
+        if (i != getOrder(G)-1) {
+            fprintf(out, "\n");
+        }
+    }
+}
 
 /*** Private utils ***/
+
+// Initialize/allocate private member values
+void initInside(Graph G, int n) {
+    int i;
+
+    // Set everything to a default
+    // Many of the BFS auxillary arrays will stay NULL for now.
+    G->order = n;
+    G->size = 0;
+    G->bfs_source = NIL;
+    G->adjacents = NULL;
+    G->seen = NULL;
+    G->parents = NULL;
+    G->distance = NULL;
+
+    // Create the adjacency list
+    G->adjacents = malloc((n+1) * sizeof(List));
+    for (i = 1; i <= n; i++) {
+        G->adjacents[i] = newList();
+    }
+}
+
+// Frees private members of the graph
+void freeInside(Graph G) {
+    int i;
+
+    // Free adjacency list
+    for (i = 1; i <= getOrder(G); i++) {
+        freeList(&G->adjacents[i]);
+    }
+    free(G->adjacents);
+
+    // The other allocated arrays might be null but can be simply freed.
+    if (G->seen != NULL) {
+        free(G->seen);
+    }
+
+    if (G->parents != NULL) {
+        free(G->parents);
+    }
+
+    if (G->distance != NULL) {
+        free(G->distance);
+    }
+}
 
 // Prints a generic error and quits
 void throw(const char *err_string) {
