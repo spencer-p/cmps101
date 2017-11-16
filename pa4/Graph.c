@@ -24,8 +24,8 @@ enum visibility { UNSEEN = 0, ADJACENT, SEEN };
 
 void initInside(Graph G, int n);
 void freeInside(Graph G);
-void throw(const char *err_string);
-void check_null(Graph G, const char *method_name);
+void graph_throw(const char *err_string);
+void graph_check_null(Graph G, const char *method_name);
 
 /*** Constructors - Destructors ***/
 Graph newGraph(int n) {
@@ -42,7 +42,8 @@ Graph newGraph(int n) {
 
 void freeGraph(Graph *pG) {
     freeInside(*pG);
-    free(pG);
+    free(*pG);
+    *pG = NULL;
 }
 
 /*** Access functions ***/
@@ -60,10 +61,10 @@ int getSource(Graph G) {
 
 int getParent(Graph G, int u) {
     if (u < 1 || u > getOrder(G)) {
-        throw("getParent: vertex not in graph");
+        graph_throw("getParent: vertex not in graph");
     }
     if (G->bfs_source == NIL) {
-        throw("getParent: BFS not yet run");
+        graph_throw("getParent: BFS not yet run");
     }
 
     return G->parents[u];
@@ -71,10 +72,10 @@ int getParent(Graph G, int u) {
 
 int getDist(Graph G, int u) {
     if (u < 1 || u > getOrder(G)) {
-        throw("getDist: vertex not in graph");
+        graph_throw("getDist: vertex not in graph");
     }
     if (G->bfs_source == NIL) {
-        throw("getDist: BFS not yet run");
+        graph_throw("getDist: BFS not yet run");
     }
 
     return G->distance[u];
@@ -82,10 +83,10 @@ int getDist(Graph G, int u) {
 
 void getPath(List L, Graph G, int u) {
     if (u < 1 || u > getOrder(G)) {
-        throw("getPath: vertex not in graph");
+        graph_throw("getPath: vertex not in graph");
     }
     if (G->bfs_source == NIL) {
-        throw("getPath: BFS not yet run");
+        graph_throw("getPath: BFS not yet run");
     }
 
     // The spec says to append the path to the List, which we'll do by moving
@@ -107,7 +108,7 @@ void makeNull(Graph G) {
 
 void addEdge(Graph G, int u, int v) {
     if (u < 1 || u > getOrder(G) || v < 1 || v > getOrder(G)) {
-        throw("addEdge: vertex is not in graph order");
+        graph_throw("addEdge: vertex is not in graph order");
     }
 
     // An edge is two arcs
@@ -120,7 +121,7 @@ void addEdge(Graph G, int u, int v) {
 
 void addArc(Graph G, int u, int v) {
     if (u < 1 || u > getOrder(G) || v < 1 || v > getOrder(G)) {
-        throw("addArc: vertex is not in graph order");
+        graph_throw("addArc: vertex is not in graph order");
     }
 
     List uList = G->adjacents[u];
@@ -145,30 +146,34 @@ void BFS(Graph G, int s) {
     int current = NIL, adj = NIL;
 
     if (s < 1 || s > getOrder(G)) {
-        throw("BFS: vertex not in graph order");
+        graph_throw("BFS: vertex not in graph order");
     }
+
+    // Set source
+    G->bfs_source = s;
 
     // Allocate seen array
     if (G->seen != NULL) {
         free(G->seen);
         G->seen = NULL;
     }
-    G->seen = calloc(getOrder(G), sizeof(enum visibility));
+    G->seen = calloc(getOrder(G)+1, sizeof(enum visibility));
 
     // Allocate distance array
     if (G->distance != NULL) {
         free(G->distance);
         G->distance = NULL;
     }
-    G->distance = malloc(getOrder(G)*sizeof(int));
-    memset(G->distance, INF, getOrder(G)*sizeof(int));
+    G->distance = malloc((getOrder(G)+1)*sizeof(int));
+    memset(G->distance, INF, (getOrder(G)+1)*sizeof(int));
+    G->distance[s] = 0;
 
     // Allocate parent array
     if (G->parents != NULL) {
         free(G->parents);
         G->parents = NULL;
     }
-    G->parents = calloc(getOrder(G), sizeof(int));
+    G->parents = calloc((getOrder(G)+1), sizeof(int));
 
     // Initialize the queue and begin looping
     queue = newList();
@@ -176,6 +181,7 @@ void BFS(Graph G, int s) {
     while (moveFront(queue), index(queue) != -1) {
         // Get current and mark it as seen
         current = get(queue);
+        delete(queue);
         G->seen[current] = SEEN;
 
         for (currentEdges = G->adjacents[current], moveFront(currentEdges);
@@ -184,20 +190,19 @@ void BFS(Graph G, int s) {
             // Get adjacent vertex
             adj = get(currentEdges);
 
-            // Update its distance
-            if (G->distance[adj] == INF
-                    || G->distance[adj] > G->distance[current]+1) {
+            if (G->seen[adj] == UNSEEN) {
+                // Set its parent
+                G->parents[adj] = current;
+
+                // Set it to adjacent
+                G->seen[adj] = ADJACENT;
+
+                // Update its distance
                 G->distance[adj] = G->distance[current] + 1;
+
+                // Add it to the queue
+                append(queue, adj);
             }
-
-            // Set its parent
-            G->parents[adj] = current;
-
-            // Set it to adjacent
-            G->seen[adj] = ADJACENT;
-
-            // Add it to the queue
-            append(queue, adj);
         }
     }
 
@@ -263,13 +268,13 @@ void freeInside(Graph G) {
 }
 
 // Prints a generic error and quits
-void throw(const char *err_string) {
+void graph_throw(const char *err_string) {
     printf("Graph Error: %s\n", err_string);
     exit(1);
 }
 
 // If G is NULL, prints a null reference error and quits
-void check_null(Graph G, const char *method_name) {
+void graph_check_null(Graph G, const char *method_name) {
     if (G == NULL) {
         printf("Graph Error: calling %s on NULL reference\n", method_name);
         exit(1);
