@@ -48,11 +48,11 @@ int main(int argc, char **argv) {
     while (fscanf(input, "%d %d\n", &u, &v) != EOF && u != 0 && v != 0) {
         BFS(g, u);
         fprintf(output, "The distance from %d to %d is ", u, v);
-        if (getDist(u, v) == INF) {
+        if (getDist(g, v) == INF) {
             fprintf(output, "infinity\n");
         }
         else {
-            fprintf(output, "%d\n", getDist(u, v));
+            fprintf(output, "%d\n", getDist(g, v));
         }
         path = newList();
         getPath(path, g, v);
