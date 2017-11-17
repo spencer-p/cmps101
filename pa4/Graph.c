@@ -90,12 +90,15 @@ void getPath(List L, Graph G, int u) {
     }
 
     // The spec says to append the path to the List, which we'll do by moving
-    // to the back once and repeatedly inserting after, since the parent tree
-    // is reversed.
+    // to the back once and inserting after (for the destination).
+    // Then we moveNext if there were already nodes, and then insert the path
+    // before the destination, since the parent tree is reversed.
     moveBack(L);
     insertAfter(L, u);
+    if (length(L) > 1) moveNext(L);
     for (int walk = G->parents[u]; walk != NIL; walk = G->parents[walk]) {
-        insertAfter(L, walk);
+        insertBefore(L, walk);
+        movePrev(L);
     }
 }
 
@@ -214,7 +217,7 @@ void printGraph(FILE* out, Graph G) {
     for (int i = 1; i <= getOrder(G); i++) {
         fprintf(out, "%d: ", i);
         printList(out, G->adjacents[i]);
-        if (i != getOrder(G)-1) {
+        if (i != getOrder(G)) {
             fprintf(out, "\n");
         }
     }
