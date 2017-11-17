@@ -47,7 +47,13 @@ int main(int argc, char **argv) {
     // Perform searches
     while (fscanf(input, "%d %d\n", &u, &v) != EOF && u != 0 && v != 0) {
         BFS(g, u);
-        fprintf(output, "The distance from %d to %d is %d\n", u, v, getDist(g, v));
+        fprintf(output, "The distance from %d to %d is ", u, v);
+        if (getDist(u, v) == INF) {
+            fprintf(output, "infinity\n");
+        }
+        else {
+            fprintf(output, "%d\n", getDist(u, v));
+        }
         path = newList();
         getPath(path, g, v);
         fprintf(output, "A shortest %d-%d path is : ", u, v);
