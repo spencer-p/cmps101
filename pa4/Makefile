@@ -1,7 +1,7 @@
 LISTLIB=List.o
 GRAPHLIB=Graph.o
 TESTS=GraphTest
-ALL=
+ALL=FindPath
 
 CC=gcc
 CFLAGS += -std=c99 -Wall -Werror -lcheck -lm
@@ -18,7 +18,9 @@ $(GRAPHLIB): $(LISTLIB)
 
 tests: $(TESTS)
 
-$(TESTS): $(LISTLIB) $(GRAPHLIB)
+$(ALL): $(GRAPHLIB) $(LISTLIB)
+
+$(TESTS): $(GRAPHLIB) $(LISTLIB)
 
 runtests: $(TESTS)
 	@for binary in $(TESTS); do\
@@ -26,4 +28,4 @@ runtests: $(TESTS)
 	done
 
 clean:
-	rm -rf *.o $(ALL)
+	rm -rf *.o $(ALL) $(TESTS)
