@@ -50,15 +50,16 @@ int main(int argc, char **argv) {
         fprintf(output, "The distance from %d to %d is ", u, v);
         if (getDist(g, v) == INF) {
             fprintf(output, "infinity\n");
+            fprintf(output, "No %d-%d path exists", u, v);
         }
         else {
             fprintf(output, "%d\n", getDist(g, v));
+            path = newList();
+            getPath(path, g, v);
+            fprintf(output, "A shortest %d-%d path is: ", u, v);
+            printList(output, path);
+            freeList(&path);
         }
-        path = newList();
-        getPath(path, g, v);
-        fprintf(output, "A shortest %d-%d path is : ", u, v);
-        printList(output, path);
-        freeList(&path);
         fprintf(output, "\n\n");
     }
 
