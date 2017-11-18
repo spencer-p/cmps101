@@ -64,7 +64,8 @@ int getParent(Graph G, int u) {
         graph_throw("getParent: vertex not in graph");
     }
     if (G->bfs_source == NIL) {
-        graph_throw("getParent: BFS not yet run");
+        // BFS not run yet
+        return NIL;
     }
 
     return G->parents[u];
@@ -75,7 +76,8 @@ int getDist(Graph G, int u) {
         graph_throw("getDist: vertex not in graph");
     }
     if (G->bfs_source == NIL) {
-        graph_throw("getDist: BFS not yet run");
+        // BFS not run yet
+        return INF;
     }
 
     return G->distance[u];
