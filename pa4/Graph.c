@@ -25,7 +25,7 @@ enum visibility { UNSEEN = 0, ADJACENT, SEEN };
 void initInside(Graph G, int n);
 void freeInside(Graph G);
 void graph_throw(const char *err_string);
-void graph_check_null(Graph G, const char *method_name);
+void graph_check_null(void *G, const char *method_name);
 
 /*** Constructors - Destructors ***/
 Graph newGraph(int n) {
@@ -48,18 +48,22 @@ void freeGraph(Graph *pG) {
 
 /*** Access functions ***/
 int getOrder(Graph G) {
+    graph_check_null(G, "getOrder");
     return G->order;
 }
 
 int getSize(Graph G) {
+    graph_check_null(G, "getSize");
     return G->size;
 }
 
 int getSource(Graph G) {
+    graph_check_null(G, "getSource");
     return G->bfs_source;
 }
 
 int getParent(Graph G, int u) {
+    graph_check_null(G, "getParent");
     if (u < 1 || u > getOrder(G)) {
         graph_throw("getParent: vertex not in graph");
     }
@@ -72,6 +76,7 @@ int getParent(Graph G, int u) {
 }
 
 int getDist(Graph G, int u) {
+    graph_check_null(G, "getDist");
     if (u < 1 || u > getOrder(G)) {
         graph_throw("getDist: vertex not in graph");
     }
@@ -84,6 +89,8 @@ int getDist(Graph G, int u) {
 }
 
 void getPath(List L, Graph G, int u) {
+    graph_check_null(G, "getPath");
+    graph_check_null(L, "getPath");
     if (u < 1 || u > getOrder(G)) {
         graph_throw("getPath: vertex not in graph");
     }
@@ -112,12 +119,14 @@ void getPath(List L, Graph G, int u) {
 
 /*** Manipulation procedures ***/
 void makeNull(Graph G) {
+    graph_check_null(G, "makeNull");
     int order = getOrder(G);
     freeInside(G);
     initInside(G, order);
 }
 
 void addEdge(Graph G, int u, int v) {
+    graph_check_null(G, "addEdge");
     if (u < 1 || u > getOrder(G) || v < 1 || v > getOrder(G)) {
         graph_throw("addEdge: vertex is not in graph order");
     }
@@ -131,6 +140,7 @@ void addEdge(Graph G, int u, int v) {
 }
 
 void addArc(Graph G, int u, int v) {
+    graph_check_null(G, "addArc");
     if (u < 1 || u > getOrder(G) || v < 1 || v > getOrder(G)) {
         graph_throw("addArc: vertex is not in graph order");
     }
@@ -156,6 +166,7 @@ void BFS(Graph G, int s) {
     List queue = NULL, currentEdges = NULL;
     int current = NIL, adj = NIL;
 
+    graph_check_null(G, "BFS");
     if (s < 1 || s > getOrder(G)) {
         graph_throw("BFS: vertex not in graph order");
     }
@@ -222,6 +233,7 @@ void BFS(Graph G, int s) {
 
 /*** Other operations ***/
 void printGraph(FILE* out, Graph G) {
+    graph_check_null(G, "printGraph");
     for (int i = 1; i <= getOrder(G); i++) {
         fprintf(out, "%d: ", i);
         printList(out, G->adjacents[i]);
@@ -285,7 +297,7 @@ void graph_throw(const char *err_string) {
 }
 
 // If G is NULL, prints a null reference error and quits
-void graph_check_null(Graph G, const char *method_name) {
+void graph_check_null(void *G, const char *method_name) {
     if (G == NULL) {
         printf("Graph Error: calling %s on NULL reference\n", method_name);
         exit(1);
