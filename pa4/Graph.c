@@ -91,6 +91,12 @@ void getPath(List L, Graph G, int u) {
         graph_throw("getPath: BFS not yet run");
     }
 
+    // If there is no path this is easy
+    if (G->parents[u] == NIL && u != getSource(G)) {
+        append(L, NIL);
+        return;
+    }
+
     // The spec says to append the path to the List, which we'll do by moving
     // to the back once and inserting after (for the destination).
     // Then we moveNext if there were already nodes, and then insert the path
