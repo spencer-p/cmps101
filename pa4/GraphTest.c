@@ -1,8 +1,9 @@
 /*
  * GraphTest.c
- * Graph unit tests
  * Author: Spencer Peterson
  * cruzid: spjpeter
+ *
+ * Graph unit tests
  */
 
 #include <stdlib.h>

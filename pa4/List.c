@@ -1,9 +1,9 @@
 /*
  * List.c
+ * Author: Spencer Peterson
+ * cruzid: spjpeter
  *
  * List object implementation
- *
- * Author: Spencer Peterson
  */
 
 #include <stdlib.h>

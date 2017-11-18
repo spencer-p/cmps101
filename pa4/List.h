@@ -1,9 +1,9 @@
 /*
  * List.h
+ * Author: Spencer Peterson
+ * cruzid: spjpeter
  *
  * Public interface to the list object
- *
- * Author: Spencer Peterson
  */
 
 #ifndef LIST_H

@@ -1,3 +1,11 @@
+#
+# Makefile
+# Author: Spencer Peterson
+# cruzid: spjpeter
+#
+# Compiles FindPath, unit tests, and .o files
+#
+
 LISTLIB=List.o
 GRAPHLIB=Graph.o
 TESTS=GraphTest

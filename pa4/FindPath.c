@@ -1,8 +1,9 @@
 /*
  * FindPath.c
- * A client to find paths using Graph.
  * Author: Spencer Peterson
  * cruzid: spjpeter
+ *
+ * A client to find paths using Graph.
  */
 
 #include <stdlib.h>
