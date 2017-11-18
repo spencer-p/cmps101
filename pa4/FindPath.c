@@ -49,11 +49,14 @@ int main(int argc, char **argv) {
     while (fscanf(input, "%d %d\n", &u, &v) != EOF && u != 0 && v != 0) {
         BFS(g, u);
         fprintf(output, "The distance from %d to %d is ", u, v);
+
         if (getDist(g, v) == INF) {
+            // If distance is infinite, say so and mark the path as nonexistant
             fprintf(output, "infinity\n");
             fprintf(output, "No %d-%d path exists", u, v);
         }
         else {
+            // Otherwise print out everything as normal
             fprintf(output, "%d\n", getDist(g, v));
             path = newList();
             getPath(path, g, v);

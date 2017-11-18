@@ -121,6 +121,8 @@ void getPath(List L, Graph G, int u) {
 void makeNull(Graph G) {
     graph_check_null(G, "makeNull");
     int order = getOrder(G);
+
+    // Free everything in the graph and then construct new insides
     freeInside(G);
     initInside(G, order);
 }
@@ -206,6 +208,7 @@ void BFS(Graph G, int s) {
         delete(queue);
         G->seen[current] = SEEN;
 
+        // For edge in current edges
         for (currentEdges = G->adjacents[current], moveFront(currentEdges);
                 index(currentEdges) != -1; moveNext(currentEdges)) {
 
