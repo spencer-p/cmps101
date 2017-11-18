@@ -11,8 +11,9 @@
 #include "List.h"
 
 #define ORDER 6
+#define MODELORDER 100
 
-Graph G;
+Graph G, A;
 
 void setup(void) {
     G = newGraph(ORDER);
@@ -35,8 +36,16 @@ void path_setup(void) {
     addEdge(G, 5, 6);
 }
 
+void model_graph_setup(void) {
+    A = newGraph(MODELORDER);
+}
+
 void teardown(void) {
     freeGraph(&G);
+}
+
+void model_teardown(void) {
+    freeGraph(&A);
 }
 
 START_TEST(test_create) {
@@ -111,9 +120,59 @@ START_TEST(test_correct_from_1) {
 }
 END_TEST
 
+START_TEST(test_getParent) {
+    for (uint8_t i = 1; i <= 100; i++)
+        ck_assert_int_eq(getParent(A, i), NIL);
+    addArc(A, 64, 4);
+    addArc(A, 64, 3);
+    addArc(A, 42, 2);
+    addArc(A, 2, 64);
+    addArc(A, 4, 2);
+    addArc(A, 3, 42);
+    BFS(A, 42);
+    ck_assert_int_eq(getParent(A, 42), NIL);
+    ck_assert_int_eq(getParent(A, 2), 42);
+    ck_assert_int_eq(getParent(A, 8), NIL);
+}
+END_TEST
+
+START_TEST(test_getPath) {
+    List C = newList();
+    List L = newList();
+    addArc(A, 64, 4);
+    addArc(A, 64, 3);
+    addArc(A, 42, 2);
+    addArc(A, 2, 64);
+    addArc(A, 4, 2);
+    addArc(A, 3, 42);
+    BFS(A, 3);
+    getPath(L, A, 64);
+    append(C, 3);
+    append(C, 42);
+    append(C, 2);
+    append(C, 64);
+    ck_assert_int_eq(equals(L, C), 1);
+    moveFront(L);
+    BFS(A, 2);
+    getPath(L, A, 2);
+    append(C, 2);
+    ck_assert_int_eq(equals(L, C), 1);
+    getPath(L, A, 99);
+    ck_assert_int_eq(equals(L, C), 0);
+    clear(L);
+    clear(C);
+    append(C, NIL);
+    BFS(A, 99);
+    getPath(L, A, 2);
+    ck_assert_int_eq(equals(C, L), 1);
+    freeList(&C);
+    freeList(&L);
+}
+END_TEST
+
 Suite *graph_suite(void) {
 	Suite *s;
-	TCase *tc, *tc_path;
+	TCase *tc, *tc_path, *tc_model;
 
 	s = suite_create("Graph");
 
@@ -138,6 +197,15 @@ Suite *graph_suite(void) {
     tcase_add_test(tc_path, test_correct_from_1);
 
     suite_add_tcase(s, tc_path);
+
+    // Tests from ModelGraphTest from graders
+    tc_model = tcase_create("Model Graph Tests");
+
+    tcase_add_checked_fixture(tc_model, model_graph_setup, model_teardown);
+    tcase_add_test(tc_model, test_getParent);
+    tcase_add_test(tc_model, test_getPath);
+
+    suite_add_tcase(s, tc_model);
 
 	return s;
 }
