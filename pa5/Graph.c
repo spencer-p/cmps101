@@ -242,6 +242,37 @@ void DFS(Graph G, List S) {
 }
 
 /*** Other operations ***/
+Graph transpose(Graph G) {
+	Graph new = newGraph(getOrder(G));
+
+	// Loop on adjacencies of G
+	for (int i = 1; i <= getOrder(G); i++) {
+		for (moveFront(G->adjacents[i]);
+				index(G->adjacents[i]) != -1;
+				moveNext(G->adjacents[i])) {
+
+			// Add arc with (i, j) swapped
+			addArc(new, get(G->adjacents[i]), i);
+		}
+	}
+
+	return new;
+}
+
+Graph copyGraph(Graph G) {
+	Graph new = newGraph(getOrder(G));
+
+	// Copy lists term by term
+	for (int i = 1; i <= getOrder(G); i++) {
+		new->adjacents[i] = copyList(G->adjacents[i]);
+	}
+
+	// Set size
+	new->size = G->size;
+
+	return new;
+}
+
 void printGraph(FILE* out, Graph G) {
     graph_check_null(G, "printGraph");
     for (int i = 1; i <= getOrder(G); i++) {
