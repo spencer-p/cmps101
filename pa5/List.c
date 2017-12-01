@@ -292,7 +292,7 @@ void insertBefore(List L, int data) {
 
 void insertAfter(List L, int data) {
     Node *tmp;
-    
+
     check_null(L, "insertAfter");
 
     if (length(L) == 0) {
