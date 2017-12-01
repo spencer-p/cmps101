@@ -136,12 +136,12 @@ void addArc(Graph G, int u, int v) {
     append(uList, v);
 }
 
-void DFS(Graph G, int s) {
-    List queue = NULL;
+void DFS(Graph G, List S) {
+    List stack = NULL, processOrder = NULL;
 
-    graph_check_null(G, "BFS");
-    if (s < 1 || s > getOrder(G)) {
-        graph_throw("BFS: vertex not in graph order");
+    graph_check_null(G, "DFS");
+    if (length(S) != getOrder(G)) {
+        graph_throw("DFS: S length != G order");
     }
 
     // Set run already
@@ -177,14 +177,68 @@ void DFS(Graph G, int s) {
     }
     G->parents = calloc((getOrder(G)+1), sizeof(int));
 
-    // Initialize the queue and begin looping
-    queue = newList();
-    append(queue, s);
-    while (moveFront(queue), index(queue) != -1) {
-		// TODO lol
-    }
+	// Separate S and the process order
+	processOrder = copyList(S);
+	clear(S);
 
-    freeList(&queue);
+    // Initialize time
+	int time = 0;
+
+	// Loop on order vertices should be processed
+    for (moveFront(processOrder);
+			index(processOrder) != -1;
+			moveNext(processOrder)) {
+
+		// Visit if unseen
+		if (G->seen[get(processOrder)] == UNSEEN) {
+			// This Visit() method is implemented non recursively using a stack
+			// of nodes to visit and switching on their colors.
+
+			// Init the stack with the root node
+			stack = newList();
+			prepend(stack, get(processOrder));
+
+			// Iterate on the stack
+			while (moveFront(stack), index(stack) != -1) {
+				int x = get(stack);
+
+				// If x is not seen, then we do the normal visit operation.
+				if (G->seen[x] == UNSEEN) {
+					G->seen[x] = ADJACENT;
+					G->discovered[x] = ++time;
+					List adj = G->adjacents[x];
+					for (moveBack(adj); index(adj) != -1; movePrev(adj)) {
+						int y = get(adj);
+						if (G->seen[y] == UNSEEN) {
+							G->parents[y] = x;
+							prepend(stack, y);
+						}
+					}
+				}
+
+				// If x is adjacent already, we've now finished it. Mark it as
+				// such and delete it.
+				else if (G->seen[x] == ADJACENT) {
+					G->seen[x] = SEEN;
+					G->finished[x] = ++time;
+					// Store in S
+					prepend(S, x);
+					// Pop off x
+					delete(stack);
+				}
+
+				// If x is already finished, just delete it. This is the result
+				// of a forward edge somewhere.
+				else if (G->seen[x] == SEEN) {
+					// Pop off x
+					delete(stack);
+				}
+			}
+
+			// Free the stack for next tree
+			freeList(&stack);
+		}
+    }
 }
 
 /*** Other operations ***/
