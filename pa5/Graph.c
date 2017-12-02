@@ -239,7 +239,7 @@ void DFS(Graph G, List S) {
 			freeList(&stack);
 		}
     }
-	
+
 	// Free the process order
 	freeList(&processOrder);
 }
