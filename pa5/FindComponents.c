@@ -56,12 +56,6 @@ int main(int argc, char **argv) {
 	// Run DFS on both
 	DFS(G, S);
 	DFS(Gt, S);
-	freeGraph(&G);
-	G = transpose(Gt);
-	DFS(G, S);
-	Graph tmp = G;
-	G = Gt;
-	Gt = tmp;
 
 	/*
 	 * Find strongly connected components.
