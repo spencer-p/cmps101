@@ -165,7 +165,7 @@ void DFS(Graph G, List S) {
     // Allocate finished array
     if (G->finished != NULL) {
         free(G->finished);
-        G->discovered = NULL;
+        G->finished = NULL;
     }
     G->finished = malloc((getOrder(G)+1)*sizeof(int));
     memset(G->finished, UNDEF, (getOrder(G)+1)*sizeof(int));
