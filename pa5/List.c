@@ -18,8 +18,8 @@
 
 // Node definitions
 typedef struct Node_t {
-    struct Node_t *next, *prev;
-    int data;
+	struct Node_t *next, *prev;
+	int data;
 } Node;
 
 Node *newNode(int d);
@@ -27,11 +27,11 @@ void freeNode(Node *n);
 
 // List struct def
 typedef struct ListObj {
-    Node *current;
-    Node *front;
-    Node *back;
-    int prevCount;
-    int nextCount;
+	Node *current;
+	Node *front;
+	Node *back;
+	int prevCount;
+	int nextCount;
 } ListObj;
 
 // Private methods
@@ -41,458 +41,458 @@ void check_null(List L, const char *method_name);
 
 // Constructors-destructors
 List newList(void) {
-    List new;
+	List new;
 
-    new = malloc(sizeof(ListObj));
+	new = malloc(sizeof(ListObj));
 
-    if (new == NULL) {
-        throw("Failed to allocate List");
-    }
+	if (new == NULL) {
+		throw("Failed to allocate List");
+	}
 
-    // Initialize empty list
-    new->current = NULL;
-    new->front = NULL;
-    new->back = NULL;
-    new->prevCount = 0;
-    new->nextCount = 0;
+	// Initialize empty list
+	new->current = NULL;
+	new->front = NULL;
+	new->back = NULL;
+	new->prevCount = 0;
+	new->nextCount = 0;
 
-    return new;
+	return new;
 }
 
 void freeList(List *pL) {
-    Node *tmp_to_free;
+	Node *tmp_to_free;
 
-    if (pL != NULL && *pL != NULL) {
-        // Free each list item
-        moveFront(*pL);
-        while (index(*pL) != -1) {
-            tmp_to_free = (*pL)->current;
-            moveNext(*pL);
-            free(tmp_to_free);
-        }
+	if (pL != NULL && *pL != NULL) {
+		// Free each list item
+		moveFront(*pL);
+		while (index(*pL) != -1) {
+			tmp_to_free = (*pL)->current;
+			moveNext(*pL);
+			free(tmp_to_free);
+		}
 
-        // Free the list structure
-        free(*pL);
-        *pL = NULL;
-    }
+		// Free the list structure
+		free(*pL);
+		*pL = NULL;
+	}
 }
 
 // Access functions
 int length(List L) {
-    check_null(L, "length");
+	check_null(L, "length");
 
-    return L->prevCount + L->nextCount;
+	return L->prevCount + L->nextCount;
 }
 
 int index(List L) {
-    check_null(L, "index");
+	check_null(L, "index");
 
-    if (L->current == NULL) {
-        return -1;
-    }
-    else {
-        return L->prevCount;
-    }
+	if (L->current == NULL) {
+		return -1;
+	}
+	else {
+		return L->prevCount;
+	}
 }
 
 int front(List L) {
-    int front;
+	int front;
 
-    check_null(L, "front");
+	check_null(L, "front");
 
-    if (L->front == NULL) {
-        throw("front() from empty list");
-    }
-    else {
-        front = L->front->data;
-    }
+	if (L->front == NULL) {
+		throw("front() from empty list");
+	}
+	else {
+		front = L->front->data;
+	}
 
-    return front;
+	return front;
 }
 
 int back(List L) {
-    int back;
+	int back;
 
-    check_null(L, "back");
+	check_null(L, "back");
 
-    if (L->back == NULL) {
-        throw("back() from empty list");
-    }
-    else {
-        back = L->back->data;
-    }
+	if (L->back == NULL) {
+		throw("back() from empty list");
+	}
+	else {
+		back = L->back->data;
+	}
 
-    return back;
+	return back;
 }
 
 int get(List L) {
-    int d;
+	int d;
 
-    check_null(L, "get");
+	check_null(L, "get");
 
-    if (L->current == NULL) {
-        throw("get() from empty list");
-    }
-    else {
-        d = L->current->data;
-    }
+	if (L->current == NULL) {
+		throw("get() from empty list");
+	}
+	else {
+		d = L->current->data;
+	}
 
-    return d;
+	return d;
 }
 
 int equals(List A, List B) {
-    Node *walkA, *walkB;
+	Node *walkA, *walkB;
 
-    check_null(A, "equals");
-    check_null(B, "equals");
+	check_null(A, "equals");
+	check_null(B, "equals");
 
-    // If the lists have different lengths they are not equal
-    if (length(A) != length(B)) {
-        return false;
-    }
+	// If the lists have different lengths they are not equal
+	if (length(A) != length(B)) {
+		return false;
+	}
 
-    for (walkA = A->front, walkB = B->front;
-            walkA != NULL && walkB != NULL;
-            walkA = walkA->next, walkB = walkB->next) {
-        if (walkA->data != walkB->data) {
-            return false;
-        }
-    }
+	for (walkA = A->front, walkB = B->front;
+			walkA != NULL && walkB != NULL;
+			walkA = walkA->next, walkB = walkB->next) {
+		if (walkA->data != walkB->data) {
+			return false;
+		}
+	}
 
-    // Final - everything was equal
-    return true;
+	// Final - everything was equal
+	return true;
 }
 
 // Manipulation procedures
 void clear(List L) {
-    Node *tmp_to_free;
+	Node *tmp_to_free;
 
-    check_null(L, "clear");
+	check_null(L, "clear");
 
-    // Free each list item
-    moveFront(L);
-    while (index(L) != -1) {
-        tmp_to_free = L->current;
-        moveNext(L);
-        free(tmp_to_free);
-    }
+	// Free each list item
+	moveFront(L);
+	while (index(L) != -1) {
+		tmp_to_free = L->current;
+		moveNext(L);
+		free(tmp_to_free);
+	}
 
-    // Reset values
-    L->current = NULL;
-    L->front = NULL;
-    L->back = NULL;
-    L->prevCount = 0;
-    L->nextCount = 0;
+	// Reset values
+	L->current = NULL;
+	L->front = NULL;
+	L->back = NULL;
+	L->prevCount = 0;
+	L->nextCount = 0;
 }
 
 void moveFront(List L) {
-    check_null(L, "moveFront");
+	check_null(L, "moveFront");
 
-    // Update front
-    L->current = L->front;
+	// Update front
+	L->current = L->front;
 
-    // Update counts
-    L->nextCount = length(L);
-    L->prevCount = 0;
+	// Update counts
+	L->nextCount = length(L);
+	L->prevCount = 0;
 }
 
 void moveBack(List L) {
-    check_null(L, "moveBack");
+	check_null(L, "moveBack");
 
-    // Update back
-    L->current = L->back;
+	// Update back
+	L->current = L->back;
 
-    // Update counts
-    L->prevCount = length(L)-1;
-    L->nextCount = 1;
+	// Update counts
+	L->prevCount = length(L)-1;
+	L->nextCount = 1;
 }
 
 void movePrev(List L) {
-    check_null(L, "movePrev");
+	check_null(L, "movePrev");
 
-    if (L->current == NULL) {
-        throw("movePrev() from undefined cursor");
-    }
+	if (L->current == NULL) {
+		throw("movePrev() from undefined cursor");
+	}
 
-    // Update current
-    L->current = L->current->prev;
+	// Update current
+	L->current = L->current->prev;
 
-    // Update counts
-    L->prevCount--;
-    L->nextCount++;
+	// Update counts
+	L->prevCount--;
+	L->nextCount++;
 }
 
 void moveNext(List L) {
-    check_null(L, "moveNext");
+	check_null(L, "moveNext");
 
-    if (L->current == NULL) {
-        throw("moveNext() from undefined cursor");
-    }
+	if (L->current == NULL) {
+		throw("moveNext() from undefined cursor");
+	}
 
-    // Update current
-    L->current = L->current->next;
+	// Update current
+	L->current = L->current->next;
 
-    // Update counts
-    L->prevCount++;
-    L->nextCount--;
+	// Update counts
+	L->prevCount++;
+	L->nextCount--;
 }
 
 void prepend(List L, int data) {
-    check_null(L, "prepend");
+	check_null(L, "prepend");
 
-    if (length(L) == 0) {
-        createCurrent(L, data);
-    }
-    else {
-        L->front->prev = newNode(data);
-        L->front->prev->next = L->front;
-        L->front = L->front->prev;
-        L->prevCount++;
-    }
+	if (length(L) == 0) {
+		createCurrent(L, data);
+	}
+	else {
+		L->front->prev = newNode(data);
+		L->front->prev->next = L->front;
+		L->front = L->front->prev;
+		L->prevCount++;
+	}
 }
 
 void append(List L, int data) {
-    check_null(L, "append");
+	check_null(L, "append");
 
-    if (length(L) == 0) {
-        createCurrent(L, data);
-    }
-    else {
-        L->back->next = newNode(data);
-        L->back->next->prev = L->back;
-        L->back = L->back->next;
-        L->nextCount++;
-    }
+	if (length(L) == 0) {
+		createCurrent(L, data);
+	}
+	else {
+		L->back->next = newNode(data);
+		L->back->next->prev = L->back;
+		L->back = L->back->next;
+		L->nextCount++;
+	}
 }
 
 void insertBefore(List L, int data) {
-    Node *tmp;
+	Node *tmp;
 
-    check_null(L, "insertBefore");
+	check_null(L, "insertBefore");
 
-    if (length(L) == 0) {
-        createCurrent(L, data);
-    }
-    else {
-        tmp = L->current->prev;
-        L->current->prev = newNode(data);
-        L->current->prev->prev = tmp;
+	if (length(L) == 0) {
+		createCurrent(L, data);
+	}
+	else {
+		tmp = L->current->prev;
+		L->current->prev = newNode(data);
+		L->current->prev->prev = tmp;
 
-        if (tmp != NULL) {
-            tmp->next = L->current->prev;
-        }
-        else {
-            L->front = L->current->prev;
-        }
+		if (tmp != NULL) {
+			tmp->next = L->current->prev;
+		}
+		else {
+			L->front = L->current->prev;
+		}
 
-        L->current->prev->next = L->current;
-        L->prevCount++;
-    }
+		L->current->prev->next = L->current;
+		L->prevCount++;
+	}
 }
 
 void insertAfter(List L, int data) {
-    Node *tmp;
+	Node *tmp;
 
-    check_null(L, "insertAfter");
+	check_null(L, "insertAfter");
 
-    if (length(L) == 0) {
-        createCurrent(L, data);
-    }
-    else {
-        tmp = L->current->next;
-        L->current->next = newNode(data);
-        L->current->next->next = tmp;
+	if (length(L) == 0) {
+		createCurrent(L, data);
+	}
+	else {
+		tmp = L->current->next;
+		L->current->next = newNode(data);
+		L->current->next->next = tmp;
 
-        if (tmp != NULL) {
-            tmp->prev = L->current->next;
-        }
-        else {
-            L->back = L->current->next;
-        }
+		if (tmp != NULL) {
+			tmp->prev = L->current->next;
+		}
+		else {
+			L->back = L->current->next;
+		}
 
-        L->current->next->prev = L->current;
-        L->nextCount++;
-    }
+		L->current->next->prev = L->current;
+		L->nextCount++;
+	}
 }
 
 void deleteFront(List L) {
-    Node *tmp;
+	Node *tmp;
 
-    check_null(L, "deleteFront");
+	check_null(L, "deleteFront");
 
-    if (length(L) <= 0) {
-        throw("deleteFront() from empty list");
-    }
+	if (length(L) <= 0) {
+		throw("deleteFront() from empty list");
+	}
 
-    // Remove reference to front if it is the current node
-    if (L->current == L->front) {
-        L->current = NULL;
-    }
+	// Remove reference to front if it is the current node
+	if (L->current == L->front) {
+		L->current = NULL;
+	}
 
-    // Save tmp
-    tmp = L->front->next;
+	// Save tmp
+	tmp = L->front->next;
 
-    // Free the front
-    freeNode(L->front);
+	// Free the front
+	freeNode(L->front);
 
-    // Remove ref to freed node
-    if (tmp != NULL) {
-        tmp->prev = NULL;
-    }
+	// Remove ref to freed node
+	if (tmp != NULL) {
+		tmp->prev = NULL;
+	}
 
-    // Move the front reference
-    L->front = tmp;
+	// Move the front reference
+	L->front = tmp;
 
-    // Update counts
-    if (L->front == L->current) {
-        L->nextCount--;
-    }
-    else {
-        L->prevCount--;
-    }
+	// Update counts
+	if (L->front == L->current) {
+		L->nextCount--;
+	}
+	else {
+		L->prevCount--;
+	}
 }
 
 void deleteBack(List L) {
-    Node *tmp;
+	Node *tmp;
 
-    check_null(L, "deleteBack");
+	check_null(L, "deleteBack");
 
-    if (length(L) <= 0) {
-        throw("deleteBack() from empty list");
-    }
+	if (length(L) <= 0) {
+		throw("deleteBack() from empty list");
+	}
 
-    // Remove reference to back if it is the current node
-    if (L->current == L->back) {
-        L->current = NULL;
-    }
+	// Remove reference to back if it is the current node
+	if (L->current == L->back) {
+		L->current = NULL;
+	}
 
-    // Save tmp
-    tmp = L->back->prev;
+	// Save tmp
+	tmp = L->back->prev;
 
-    // Free the back
-    freeNode(L->back);
+	// Free the back
+	freeNode(L->back);
 
-    // Remove reference to freed node
-    if (tmp != NULL) {
-        tmp->next = NULL;
-    }
+	// Remove reference to freed node
+	if (tmp != NULL) {
+		tmp->next = NULL;
+	}
 
-    // Move the front reference
-    L->back = tmp;
+	// Move the front reference
+	L->back = tmp;
 
-    // Update counts
-    L->nextCount--;
+	// Update counts
+	L->nextCount--;
 }
 
 void delete(List L) {
-    check_null(L, "delete");
+	check_null(L, "delete");
 
-    if (length(L) <= 0) {
-        throw("deleteBack() from empty list");
-    }
+	if (length(L) <= 0) {
+		throw("deleteBack() from empty list");
+	}
 
-    if (L->current == NULL) {
-        throw("delete() from undefined cursor");
-    }
+	if (L->current == NULL) {
+		throw("delete() from undefined cursor");
+	}
 
-    // Close previous
-    if (L->current->prev != NULL) {
-        L->current->prev->next = L->current->next;
-    }
+	// Close previous
+	if (L->current->prev != NULL) {
+		L->current->prev->next = L->current->next;
+	}
 
-    // Close next
-    if (L->current->next != NULL) {
-        L->current->next->prev = L->current->prev;
-    }
+	// Close next
+	if (L->current->next != NULL) {
+		L->current->next->prev = L->current->prev;
+	}
 
-    // Update front if needed
-    if (L->current == L->front) {
-        L->front = L->current->next;
-    }
+	// Update front if needed
+	if (L->current == L->front) {
+		L->front = L->current->next;
+	}
 
-    // Update back if needed
-    if (L->current == L->back) {
-        L->back = L->current->prev;
-    }
+	// Update back if needed
+	if (L->current == L->back) {
+		L->back = L->current->prev;
+	}
 
-    // Free the current
-    freeNode(L->current);
-    L->current = NULL;
+	// Free the current
+	freeNode(L->current);
+	L->current = NULL;
 
-    // Update count
-    L->nextCount--;
+	// Update count
+	L->nextCount--;
 }
 
 // Other operations
 void printList(FILE* out, List L) {
-    Node *walk;
+	Node *walk;
 
-    check_null(L, "printList");
+	check_null(L, "printList");
 
-    for (walk = L->front; walk != NULL; walk = walk->next) {
-        fprintf(out, "%d%s", walk->data, (walk->next == NULL)?"":" ");
-    }
+	for (walk = L->front; walk != NULL; walk = walk->next) {
+		fprintf(out, "%d%s", walk->data, (walk->next == NULL)?"":" ");
+	}
 }
 
 List copyList(List L) {
-    List new;
-    Node *walk;
+	List new;
+	Node *walk;
 
-    check_null(L, "copyList");
+	check_null(L, "copyList");
 
-    new = newList();
+	new = newList();
 
-    for (walk = L->front; walk != NULL; walk = walk->next) {
-        append(new, walk->data);
-    }
+	for (walk = L->front; walk != NULL; walk = walk->next) {
+		append(new, walk->data);
+	}
 
-    return new;
+	return new;
 }
 
 Node *newNode(int d) {
-    Node *new;
+	Node *new;
 
-    new = malloc(sizeof(Node));
+	new = malloc(sizeof(Node));
 
-    if (new == NULL) {
-        throw("Failed to allocate Node");
-    }
+	if (new == NULL) {
+		throw("Failed to allocate Node");
+	}
 
-    // Initialize empty node
-    new->next = NULL;
-    new->prev = NULL;
-    new->data = d;
+	// Initialize empty node
+	new->next = NULL;
+	new->prev = NULL;
+	new->data = d;
 
-    return new;
+	return new;
 }
 
 void freeNode(Node *n) {
-    free(n);
+	free(n);
 }
 
 // Creates a first entry in empty list
 void createCurrent(List L, int data) {
-    if (length(L) > 0) {
-        throw("Internal error");
-    }
+	if (length(L) > 0) {
+		throw("Internal error");
+	}
 
-    L->current = newNode(data);
-    L->front = L->current;
-    L->back = L->current;
-    L->nextCount = 1;
-    L->prevCount = 0;
+	L->current = newNode(data);
+	L->front = L->current;
+	L->back = L->current;
+	L->nextCount = 1;
+	L->prevCount = 0;
 }
 
 // Prints a generic list error and quits
 void throw(const char *err_string) {
-    printf("List Error: %s\n", err_string);
-    exit(1);
+	printf("List Error: %s\n", err_string);
+	exit(1);
 }
 
 // If L is NULL, prints a null reference error and quits
 void check_null(List L, const char *method_name) {
-    if (L == NULL) {
-        printf("List Error: calling %s on NULL List reference\n", method_name);
-        exit(1);
-    }
+	if (L == NULL) {
+		printf("List Error: calling %s on NULL List reference\n", method_name);
+		exit(1);
+	}
 }
