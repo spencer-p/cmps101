@@ -3,6 +3,6 @@ List.h         - Public interface to List ADT
 Graph.c        - Private implementation of Graph ADT
 Graph.h        - Public interface to Graph ADT
 GraphTest.c    - Unit tests for the Graph ADT
-FindComponents - 
+FindComponents - Finds strongly connected components of a graph
 Makefile       - Defines rules for compiling above files
 README         - This file
